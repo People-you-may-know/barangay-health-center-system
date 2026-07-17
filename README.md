@@ -16,6 +16,7 @@ This study aims to develop a Barangay Health Center Patient Record and Appointme
 4. How can the system improve the accuracy, security, and organization of patient information?
 5. How can the system generate reports that support efficient monitoring and decision-making in the barangay health center?
 
+
 CRUD
 For your Barangay Health Center Patient Record and Appointment Management System, the CRUD operations are:
 
@@ -77,8 +78,49 @@ View user accounts
 
 Update user information or password
 
-Delete or deactivate user account
-Delete or deactivate user account
++---------------------------------------------------------------+
+|                    CRUD OPERATIONS                            |
++---------------------------------------------------------------+
+
+PATIENT RECORDS
+[Create] Register a new patient
+[Read]   View patient information and medical history
+[Update] Edit patient details
+[Delete] Delete patient records (authorized users only)
+
+---------------------------------------------------------------
+
+APPOINTMENTS
+[Create] Schedule a new appointment
+[Read]   View appointment schedules
+[Update] Reschedule or modify appointments
+[Delete] Cancel or delete appointments
+
+---------------------------------------------------------------
+
+MEDICAL RECORDS
+[Create] Add consultation or treatment records
+[Read]   View patients' medical history
+[Update] Update diagnosis, treatment, or prescription
+[Delete] Delete incorrect medical records (authorized users only)
+
+---------------------------------------------------------------
+
+HEALTH SERVICES
+[Create] Add available health services
+[Read]   View health services offered
+[Update] Update health service information
+[Delete] Remove unavailable health services
+
+---------------------------------------------------------------
+
+USERS (ADMIN/STAFF)
+[Create] Create staff accounts
+[Read]   View user accounts
+[Update] Update user information or passwords
+[Delete] Delete or deactivate user accounts
+
+
 CRUD Meaning
 
 * C – Create: Add new data (e.g., register a patient).
