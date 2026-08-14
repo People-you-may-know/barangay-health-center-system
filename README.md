@@ -19,16 +19,10 @@ This study aims to develop a Barangay Health Center Patient Record and Appointme
 
 CRUD
 For your Barangay Health Center Patient Record and Appointment Management System, the CRUD operations are:
-
 Module
 
-Create
+Create    Read   Update   Delete
 
-Read
-
-Update
-
-Delete
 
 📋 Patient Records
 
@@ -81,6 +75,7 @@ Update user information or password
 +---------------------------------------------------------------+
 |                    CRUD OPERATIONS                            |
 +---------------------------------------------------------------+
+
 
 PATIENT RECORDS
 [Create] Register a new patient
