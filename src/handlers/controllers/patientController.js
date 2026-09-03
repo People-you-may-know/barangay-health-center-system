@@ -1,24 +1,65 @@
-const patientHandlers = require("../patientHandlers");
+const patientsData = require("../../data/patientsData");
 
-const listPatients = (req, res) => {
-  return patientHandlers.listPatients(req, res);
-};
+function listPatients(req, res) {
+  const patients = patientsData.getPatients();
 
-const showPatient = (req, res) => {
-  return patientHandlers.showPatient(req, res);
-};
+  return res.status(200).json({
+    data: patients
+  });
+}
 
-const createPatient = (req, res) => {
-  return patientHandlers.createPatient(req, res);
-};
+function showPatient(req, res) {
+  const patient = patientsData.getPatientById(req.params.id);
 
-const updatePatient = (req, res) => {
-  return patientHandlers.updatePatient(req, res);
-};
+  if (!patient) {
+    return res.status(404).json({
+      error: "Patient not found"
+    });
+  }
 
-const deletePatient = (req, res) => {
-  return patientHandlers.deletePatient(req, res); 
-};
+  return res.status(200).json({
+    data: patient
+  });
+}
+
+function createPatient(req, res) {
+  const patient = patientsData.savePatient(req.body);
+
+  return res.status(201).json({
+    data: patient
+  });
+}
+
+function updatePatient(req, res) {
+  const patient = patientsData.updatePatientById(
+    req.params.id,
+    req.body
+  );
+
+  if (!patient) {
+    return res.status(404).json({
+      error: "Patient not found"
+    });
+  }
+
+  return res.status(200).json({
+    data: patient
+  });
+}
+
+function deletePatient(req, res) {
+  const patient = patientsData.deletePatientById(req.params.id);
+
+  if (!patient) {
+    return res.status(404).json({
+      error: "Patient not found"
+    });
+  }
+
+  return res.status(200).json({
+    data: patient
+  });
+}
 
 module.exports = {
   listPatients,
