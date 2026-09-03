@@ -10,116 +10,126 @@
 | Hanna Evangelista | Builder |
 | Angelica Aninon | Builder |
 
+
 ## Patient Management
 
-| Route | Field | Presence | Type | Length/Range | Format | Allowed Values | Referential |
-|---|---|---|---|---|---|---|---|
-| POST /patients | firstName | required | string | 1–50 chars | letters and spaces | — | — |
-| POST /patients | lastName | required | string | 1–50 chars | letters and spaces | — | — |
-| POST /patients | dateOfBirth | required | date | — | YYYY-MM-DD | — | — |
-| POST /patients | gender | required | string | — | — | Male, Female, Other | — |
-| POST /patients | contactNumber | required | string | 11 digits | 09XXXXXXXXX | — | — |
-| POST /patients | address | required | string | 5–200 chars | plain text | — | — |
-| PUT /patients/:id | firstName | required | string | 1–50 chars | letters and spaces | — | — |
-| PUT /patients/:id | lastName | required | string | 1–50 chars | letters and spaces | — | — |
-| PUT /patients/:id | dateOfBirth | required | date | — | YYYY-MM-DD | — | — |
-| PUT /patients/:id | gender | required | string | — | — | Male, Female, Other | — |
-| PUT /patients/:id | contactNumber | required | string | 11 digits | 09XXXXXXXXX | — | — |
-| PUT /patients/:id | address | required | string | 5–200 chars | plain text | — | — |
+### POST /patients
+
+| Field | Rules |
+|---|---|
+| firstName | required, string, 1–50 chars |
+| lastName | required, string, 1–50 chars |
+| dateOfBirth | required, date, YYYY-MM-DD format |
+| gender | required, one of: Male, Female, Other |
+| contactNumber | required, string, 11 digits, format 09XXXXXXXXX |
+| address | required, string, 5–200 chars |
+
+### PUT /patients/:id
+
+| Field | Rules |
+|---|---|
+| firstName | optional, string, 1–50 chars |
+| lastName | optional, string, 1–50 chars |
+| dateOfBirth | optional, date, YYYY-MM-DD format |
+| gender | optional, one of: Male, Female, Other |
+| contactNumber | optional, string, 11 digits, format 09XXXXXXXXX |
+| address | optional, string, 5–200 chars |
+
+---
 
 ## Appointment Management
 
-| Route | Field | Presence | Type | Length/Range | Format | Allowed Values | Referential |
-|---|---|---|---|---|---|---|---|
-| POST /appointments | patientId | required | string | — | valid patient ID | — | must reference existing patient |
-| POST /appointments | appointmentDate | required | date | — | YYYY-MM-DD | — | — |
-| POST /appointments | appointmentTime | required | string | — | HH:MM | — | — |
-| POST /appointments | service | required | string | 1–100 chars | letters and spaces | — | — |
-| POST /appointments | status | required | string | — | — | Scheduled, Completed, Cancelled | — |
-| PUT /appointments/:id | patientId | required | string | — | valid patient ID | — | must reference existing patient |
-| PUT /appointments/:id | appointmentDate | required | date | — | YYYY-MM-DD | — | — |
-| PUT /appointments/:id | appointmentTime | required | string | — | HH:MM | — | — |
-| PUT /appointments/:id | service | required | string | 1–100 chars | letters and spaces | — | — |
-| PUT /appointments/:id | status | required | string | — | — | Scheduled, Completed, Cancelled | — |
+### POST /appointments
+
+| Field | Rules |
+|---|---|
+| patientId | required, referential, must reference an existing patient |
+| appointmentDate | required, date, YYYY-MM-DD format |
+| appointmentTime | required, time, HH:MM format |
+| service | required, string, 1–100 chars |
+| status | required, one of: Scheduled, Completed, Cancelled |
+
+### PUT /appointments/:id
+
+| Field | Rules |
+|---|---|
+| patientId | optional, referential, must reference an existing patient |
+| appointmentDate | optional, date, YYYY-MM-DD format |
+| appointmentTime | optional, time, HH:MM format |
+| service | optional, string, 1–100 chars |
+| status | optional, one of: Scheduled, Completed, Cancelled |
+
+---
 
 ## Medical Records
 
-| Route | Field | Presence | Type | Length/Range | Format | Allowed Values | Referential |
-|---|---|---|---|---|---|---|---|
-| POST /medical-records | patientId | required | string | — | valid patient ID | — | must reference existing patient |
-| POST /medical-records | diagnosis | required | string | 1–500 chars | plain text | — | — |
-| POST /medical-records | treatment | required | string | 1–500 chars | plain text | — | — |
-| POST /medical-records | prescription | optional | string | 0–500 chars | plain text | — | — |
-| PUT /medical-records/:id | patientId | required | string | — | valid patient ID | — | must reference existing patient |
-| PUT /medical-records/:id | diagnosis | required | string | 1–500 chars | plain text | — | — |
-| PUT /medical-records/:id | treatment | required | string | 1–500 chars | plain text | — | — |
-| PUT /medical-records/:id | prescription | optional | string | 0–500 chars | plain text | — | — |
+### POST /medical-records
+
+| Field | Rules |
+|---|---|
+| patientId | required, referential, must reference an existing patient |
+| diagnosis | required, string, 1–500 chars |
+| treatment | required, string, 1–500 chars |
+| recordDate | required, date, YYYY-MM-DD format |
+
+### PUT /medical-records/:id
+
+| Field | Rules |
+|---|---|
+| patientId | optional, referential, must reference an existing patient |
+| diagnosis | optional, string, 1–500 chars |
+| treatment | optional, string, 1–500 chars |
+| recordDate | optional, date, YYYY-MM-DD format |
+
+---
 
 ## Health Services
 
-| Route | Field | Presence | Type | Length/Range | Format | Allowed Values | Referential |
-|---|---|---|---|---|---|---|---|
-| POST /health-services | serviceName | required | string | 1–100 chars | letters and spaces | — | — |
-| POST /health-services | description | required | string | 1–500 chars | plain text | — | — |
-| POST /health-services | availability | required | string | — | — | Available, Unavailable | — |
-| PUT /health-services/:id | serviceName | required | string | 1–100 chars | letters and spaces | — | — |
-| PUT /health-services/:id | description | required | string | 1–500 chars | plain text | — | — |
-| PUT /health-services/:id | availability | required | string | — | — | Available, Unavailable | — |
+### POST /health-services
+
+| Field | Rules |
+|---|---|
+| name | required, string, 1–100 chars |
+| description | required, string, 1–500 chars |
+| status | required, one of: Active, Inactive |
+
+### PUT /health-services/:id
+
+| Field | Rules |
+|---|---|
+| name | optional, string, 1–100 chars |
+| description | optional, string, 1–500 chars |
+| status | optional, one of: Active, Inactive |
+
+---
 
 ## User Management
 
-| Route | Field | Presence | Type | Length/Range | Format | Allowed Values | Referential |
-|---|---|---|---|---|---|---|---|
-| POST /users | username | required | string | 3–50 chars | letters, numbers, underscore | — | — |
-| POST /users | password | required | string | 8–100 chars | — | — | — |
-| POST /users | fullName | required | string | 1–100 chars | letters and spaces | — | — |
-| POST /users | role | required | string | — | — | Admin, Staff | — |
-| PUT /users/:id | username | required | string | 3–50 chars | letters, numbers, underscore | — | — |
-| PUT /users/:id | password | optional | string | 8–100 chars | — | — | — |
-| PUT /users/:id | fullName | required | string | 1–100 chars | letters and spaces | — | — |
-| PUT /users/:id | role | required | string | — | — | Admin, Staff | — |
+### POST /users
 
-## Standard Error Shape
+| Field | Rules |
+|---|---|
+| username | required, string, 3–50 chars |
+| password | required, string, 8–100 chars |
+| role | required, one of: Administrator, Staff |
 
-All validation errors use the same format:
+### PUT /users/:id
 
+| Field | Rules |
+|---|---|
+| username | optional, string, 3–50 chars |
+| password | optional, string, 8–100 chars |
+| role | optional, one of: Administrator, Staff |
+
+---
+
+# Standard Error Response
+
+All validation failures use the same format:
+
+```json
 {
   "status": 422,
-  "error": "human-readable message",
-  "field": "field name"
+  "error": "field is invalid",
+  "field": "field"
 }
-
-## Authorization
-
-Sensitive actions must check whether the current user has permission.
-
-For this system, deleting a patient record is a sensitive action.
-
-Forbidden actions return:
-
-403
-
-Example authorization response:
-
-{
-  "status": 403,
-  "error": "not allowed",
-  "field": "authorization"
-}
-
-Validation failures return:
-
-422
-
-## Break-It Test Log
-
-| Test | Route | Bad Input/Action | Expected | Actual | Result |
-|---|---|---|---|---|---|
-| 1 | POST /patients | Missing firstName | 422 | To be tested | PENDING |
-| 2 | POST /patients | Wrong type for contactNumber | 422 | To be tested | PENDING |
-| 3 | POST /patients | Invalid date format | 422 | To be tested | PENDING |
-| 4 | POST /patients | Invalid gender value | 422 | To be tested | PENDING |
-| 5 | DELETE /patients/:id | Unauthorized deletion | 403 | To be tested | PENDING |
-
-
-
