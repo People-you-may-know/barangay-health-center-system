@@ -133,3 +133,26 @@ All validation failures use the same format:
   "error": "field is invalid",
   "field": "field"
 }
+---
+
+# Break-It Test Log
+
+| Test | Expected Result | Actual Result |
+|---|---|---|
+| Missing required patient field | HTTP 422 | Pending |
+| Invalid patient contact number | HTTP 422 | Pending |
+| Invalid patient gender | HTTP 422 | Pending |
+| Invalid appointment date | HTTP 422 | Pending |
+| Invalid appointment status | HTTP 422 | Pending |
+| Invalid medical record patientId | HTTP 422 | Pending |
+| Invalid health service status | HTTP 422 | Pending |
+| Invalid user role | HTTP 422 | Pending |
+| Forbidden delete action | HTTP 403 | Pending |
+
+## Break-It Testing Notes
+
+- Invalid input must not create or update a record.
+- Validation errors must use the standard error response.
+- Validation failures must return HTTP 422.
+- Forbidden actions must return HTTP 403.
+- Actual results will be recorded after testing each route.
