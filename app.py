@@ -1245,42 +1245,48 @@ app.add_url_rule(
 
 # Appointment Routes
 
+from controllers.appointment_controller import (
+    list_appointments as controller_list_appointments,
+    show_appointment as controller_show_appointment,
+    create_appointment as controller_create_appointment,
+    update_appointment as controller_update_appointment,
+    delete_appointment as controller_delete_appointment
+)
+
 app.add_url_rule(
     "/appointments",
     "list_appointments",
-    list_appointments,
+    controller_list_appointments,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/appointments/<int:appointment_id>",
     "show_appointment",
-    show_appointment,
+    controller_show_appointment,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/appointments",
     "create_appointment",
-    create_appointment,
+    controller_create_appointment,
     methods=["POST"]
 )
 
 app.add_url_rule(
     "/appointments/<int:appointment_id>",
     "update_appointment",
-    update_appointment,
+    controller_update_appointment,
     methods=["PUT"]
 )
 
 app.add_url_rule(
     "/appointments/<int:appointment_id>",
     "delete_appointment",
-    delete_appointment,
+    controller_delete_appointment,
     methods=["DELETE"]
 )
-
-
 # Medical Records Routes
 
 app.add_url_rule(
