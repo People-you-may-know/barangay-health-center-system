@@ -1368,45 +1368,50 @@ app.add_url_rule(
     methods=["DELETE"]
 )
 
-
 # User Routes
+
+from controllers.user_controller import (
+    list_users as controller_list_users,
+    show_user as controller_show_user,
+    create_user as controller_create_user,
+    update_user as controller_update_user,
+    delete_user as controller_delete_user
+)
 
 app.add_url_rule(
     "/users",
     "list_users",
-    list_users,
+    controller_list_users,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/users/<int:user_id>",
     "show_user",
-    show_user,
+    controller_show_user,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/users",
     "create_user",
-    create_user,
+    controller_create_user,
     methods=["POST"]
 )
 
 app.add_url_rule(
     "/users/<int:user_id>",
     "update_user",
-    update_user,
+    controller_update_user,
     methods=["PUT"]
 )
 
 app.add_url_rule(
     "/users/<int:user_id>",
     "delete_user",
-    delete_user,
+    controller_delete_user,
     methods=["DELETE"]
 )
-
-
 # =====================================================
 # START FLASK
 # =====================================================
