@@ -1196,44 +1196,52 @@ def delete_user(user_id):
 # =====================================================
 # ROUTES
 # =====================================================
-
 # Patient Routes
+# Import controller here, after patients and validation_error
+# have already been defined above.
+
+from controllers.patient_controller import (
+    list_patients as controller_list_patients,
+    show_patient as controller_show_patient,
+    create_patient as controller_create_patient,
+    update_patient as controller_update_patient,
+    delete_patient as controller_delete_patient
+)
 
 app.add_url_rule(
     "/patients",
     "list_patients",
-    list_patients,
+    controller_list_patients,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/patients/<int:patient_id>",
     "show_patient",
-    show_patient,
+    controller_show_patient,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/patients",
     "create_patient",
-    create_patient,
+    controller_create_patient,
     methods=["POST"]
 )
 
 app.add_url_rule(
     "/patients/<int:patient_id>",
     "update_patient",
-    update_patient,
+    controller_update_patient,
     methods=["PUT"]
 )
 
 app.add_url_rule(
     "/patients/<int:patient_id>",
     "delete_patient",
-    delete_patient,
+    controller_delete_patient,
     methods=["DELETE"]
 )
-
 
 # Appointment Routes
 
