@@ -1289,42 +1289,48 @@ app.add_url_rule(
 )
 # Medical Records Routes
 
+from controllers.medical_record_controller import (
+    list_medical_records as controller_list_medical_records,
+    show_medical_record as controller_show_medical_record,
+    create_medical_record as controller_create_medical_record,
+    update_medical_record as controller_update_medical_record,
+    delete_medical_record as controller_delete_medical_record
+)
+
 app.add_url_rule(
     "/medical-records",
     "list_medical_records",
-    list_medical_records,
+    controller_list_medical_records,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/medical-records/<int:record_id>",
     "show_medical_record",
-    show_medical_record,
+    controller_show_medical_record,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/medical-records",
     "create_medical_record",
-    create_medical_record,
+    controller_create_medical_record,
     methods=["POST"]
 )
 
 app.add_url_rule(
     "/medical-records/<int:record_id>",
     "update_medical_record",
-    update_medical_record,
+    controller_update_medical_record,
     methods=["PUT"]
 )
 
 app.add_url_rule(
     "/medical-records/<int:record_id>",
     "delete_medical_record",
-    delete_medical_record,
+    controller_delete_medical_record,
     methods=["DELETE"]
 )
-
-
 # Health Services Routes
 
 app.add_url_rule(
