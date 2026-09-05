@@ -132,3 +132,10 @@ These CRUD operations form the core functionality of the system and allow author
 - Mary Cajenta – Scribe
 - Hanna Evangelista – Builder
 - Angelica Aninon – Builder
+
+## Running Automated Tests
+
+Run the automated tests with:
+
+```bash
+python -m unittest discover -s tests -p "test_*.py"
