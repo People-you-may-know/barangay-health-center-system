@@ -51,6 +51,7 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # -------------------------
     # PATIENT TESTS
     # -------------------------
+
     def test_update_patient_validation_failure(self):
         patient_id = self.create_patient()
 
@@ -65,7 +66,7 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         self.assertEqual(response.get_json()["status"], 422)
         self.assertIn("error", response.get_json())
         self.assertIn("field", response.get_json())
-    
+
     def test_create_patient_success(self):
         response = self.client.post(
             "/patients",
@@ -123,6 +124,7 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # -------------------------
     # APPOINTMENT TESTS
     # -------------------------
+
     def test_update_appointment_validation_failure(self):
         patient_id = self.create_patient()
 
@@ -137,6 +139,8 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
             }
         )
 
+        self.assertEqual(response.status_code, 201)
+
         appointment_id = response.get_json()["data"]["id"]
 
         response = self.client.put(
@@ -150,6 +154,7 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         self.assertEqual(response.get_json()["status"], 422)
         self.assertIn("error", response.get_json())
         self.assertIn("field", response.get_json())
+
     def test_create_appointment_success(self):
         patient_id = self.create_patient()
 
@@ -184,6 +189,35 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # MEDICAL RECORD TESTS
     # -------------------------
 
+    def test_update_medical_record_validation_failure(self):
+        patient_id = self.create_patient()
+
+        response = self.client.post(
+            "/medical-records",
+            json={
+                "patientId": patient_id,
+                "diagnosis": "Fever",
+                "treatment": "Rest and hydration",
+                "recordDate": "2026-09-05"
+            }
+        )
+
+        self.assertEqual(response.status_code, 201)
+
+        medical_record_id = response.get_json()["data"]["id"]
+
+        response = self.client.put(
+            f"/medical-records/{medical_record_id}",
+            json={
+                "diagnosis": ""
+            }
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
+        self.assertIn("field", response.get_json())
+
     def test_create_medical_record_success(self):
         patient_id = self.create_patient()
 
@@ -215,6 +249,32 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # -------------------------
     # HEALTH SERVICE TESTS
     # -------------------------
+
+    def test_update_health_service_validation_failure(self):
+        response = self.client.post(
+            "/health-services",
+            json={
+                "name": "Medical Checkup",
+                "description": "Basic health consultation",
+                "status": "Active"
+            }
+        )
+
+        self.assertEqual(response.status_code, 201)
+
+        health_service_id = response.get_json()["data"]["id"]
+
+        response = self.client.put(
+            f"/health-services/{health_service_id}",
+            json={
+                "name": ""
+            }
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
+        self.assertIn("field", response.get_json())
 
     def test_create_health_service_success(self):
         response = self.client.post(
@@ -279,6 +339,8 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
             }
         )
 
+        self.assertEqual(create_response.status_code, 201)
+
         user_id = create_response.get_json()["data"]["id"]
 
         # Try deleting without Administrator role
@@ -298,6 +360,8 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
                 "role": "Staff"
             }
         )
+
+        self.assertEqual(create_response.status_code, 201)
 
         user_id = create_response.get_json()["data"]["id"]
 
