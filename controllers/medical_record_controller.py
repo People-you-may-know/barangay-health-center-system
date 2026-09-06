@@ -3,46 +3,13 @@ from flask import jsonify, request
 from app import (
     medical_records,
     validation_error,
-    get_patient_by_id
+    get_patient_by_id,
+    save_medical_record,
+    get_medical_records,
+    get_medical_record_by_id,
+    update_medical_record_by_id,
+    delete_medical_record_by_id
 )
-
-
-def save_medical_record(data):
-    record = {
-        "id": len(medical_records) + 1,
-        **data
-    }
-    medical_records.append(record)
-    return record
-
-
-def get_medical_records():
-    return medical_records
-
-
-def get_medical_record_by_id(record_id):
-    for record in medical_records:
-        if record["id"] == int(record_id):
-            return record
-    return None
-
-
-def update_medical_record_by_id(record_id, data):
-    for index, record in enumerate(medical_records):
-        if record["id"] == int(record_id):
-            medical_records[index] = {
-                **record,
-                **data
-            }
-            return medical_records[index]
-    return None
-
-
-def delete_medical_record_by_id(record_id):
-    for index, record in enumerate(medical_records):
-        if record["id"] == int(record_id):
-            return medical_records.pop(index)
-    return None
 
 
 def list_medical_records():
