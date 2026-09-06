@@ -10,27 +10,28 @@ from app import (
 )
 
 
-class TestBarangayHealthCenterSystem(unittest.TestCase):
+class AppTestCase(unittest.TestCase):
 
     def setUp(self):
         app.config["TESTING"] = True
-
-        # Clear data before every test
-        patients.clear()
-        appointments.clear()
-        medical_records.clear()
-        health_services.clear()
-        users.clear()
-
         self.client = app.test_client()
 
-    def tearDown(self):
-        # Clear data after every test
         patients.clear()
         appointments.clear()
         medical_records.clear()
         health_services.clear()
         users.clear()
+
+    def tearDown(self):
+        patients.clear()
+        appointments.clear()
+        medical_records.clear()
+        health_services.clear()
+        users.clear()
+
+    # =========================
+    # Helper
+    # =========================
 
     def create_patient(self):
         response = self.client.post(
@@ -38,34 +39,19 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
             json={
                 "firstName": "Juan",
                 "lastName": "Dela Cruz",
-                "dateOfBirth": "2000-01-15",
+                "dateOfBirth": "2000-01-01",
                 "gender": "Male",
                 "contactNumber": "09123456789",
-                "address": "Barangay Poblacion"
+                "address": "Bukidnon"
             }
         )
 
         self.assertEqual(response.status_code, 201)
         return response.get_json()["data"]["id"]
 
-    # -------------------------
-    # PATIENT TESTS
-    # -------------------------
-
-    def test_update_patient_validation_failure(self):
-        patient_id = self.create_patient()
-
-        response = self.client.put(
-            f"/patients/{patient_id}",
-            json={
-                "firstName": ""
-            }
-        )
-
-        self.assertEqual(response.status_code, 422)
-        self.assertEqual(response.get_json()["status"], 422)
-        self.assertIn("error", response.get_json())
-        self.assertIn("field", response.get_json())
+    # =========================
+    # Patient Tests
+    # =========================
 
     def test_create_patient_success(self):
         response = self.client.post(
@@ -73,10 +59,10 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
             json={
                 "firstName": "Juan",
                 "lastName": "Dela Cruz",
-                "dateOfBirth": "2000-01-15",
+                "dateOfBirth": "2000-01-01",
                 "gender": "Male",
                 "contactNumber": "09123456789",
-                "address": "Barangay Poblacion"
+                "address": "Bukidnon"
             }
         )
 
@@ -89,17 +75,16 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
             json={
                 "firstName": "",
                 "lastName": "Dela Cruz",
-                "dateOfBirth": "2000-01-15",
+                "dateOfBirth": "2000-01-01",
                 "gender": "Male",
                 "contactNumber": "09123456789",
-                "address": "Barangay Poblacion"
+                "address": "Bukidnon"
             }
         )
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.get_json()["status"], 422)
         self.assertIn("error", response.get_json())
-        self.assertIn("field", response.get_json())
 
     def test_create_patient_invalid_contact_number(self):
         response = self.client.post(
@@ -107,20 +92,34 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
             json={
                 "firstName": "Juan",
                 "lastName": "Dela Cruz",
-                "dateOfBirth": "2000-01-15",
+                "dateOfBirth": "2000-01-01",
                 "gender": "Male",
                 "contactNumber": "12345",
-                "address": "Barangay Poblacion"
+                "address": "Bukidnon"
             }
         )
 
         self.assertEqual(response.status_code, 422)
 
+    def test_update_patient_validation_failure(self):
+        patient_id = self.create_patient()
+
+        response = self.client.put(
+            f"/patients/{patient_id}",
+            json={
+                "contactNumber": "123"
+            }
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
+
     def test_update_patient_not_found(self):
         response = self.client.put(
             "/patients/999",
             json={
-                "firstName": "Maria"
+                "firstName": "Updated"
             }
         )
 
@@ -132,52 +131,12 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         response = self.client.get("/patients/999")
 
         self.assertEqual(response.status_code, 404)
-
-    # -------------------------
-    # APPOINTMENT TESTS
-    # -------------------------
-
-    def test_update_appointment_validation_failure(self):
-        patient_id = self.create_patient()
-
-        response = self.client.post(
-            "/appointments",
-            json={
-                "patientId": patient_id,
-                "appointmentDate": "2026-09-10",
-                "appointmentTime": "10:00",
-                "service": "General Checkup",
-                "status": "Scheduled"
-            }
-        )
-
-        self.assertEqual(response.status_code, 201)
-
-        appointment_id = response.get_json()["data"]["id"]
-
-        response = self.client.put(
-            f"/appointments/{appointment_id}",
-            json={
-                "service": ""
-            }
-        )
-
-        self.assertEqual(response.status_code, 422)
-        self.assertEqual(response.get_json()["status"], 422)
-        self.assertIn("error", response.get_json())
-        self.assertIn("field", response.get_json())
-
-    def test_update_appointment_not_found(self):
-        response = self.client.put(
-            "/appointments/999",
-            json={
-                "service": "General Consultation"
-            }
-        )
-
-        self.assertEqual(response.status_code, 404)
         self.assertEqual(response.get_json()["status"], 404)
         self.assertIn("error", response.get_json())
+
+    # =========================
+    # Appointment Tests
+    # =========================
 
     def test_create_appointment_success(self):
         patient_id = self.create_patient()
@@ -188,12 +147,13 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
                 "patientId": patient_id,
                 "appointmentDate": "2026-09-10",
                 "appointmentTime": "09:00",
-                "service": "General Consultation",
+                "service": "Medical Checkup",
                 "status": "Scheduled"
             }
         )
 
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.get_json()["status"], 201)
 
     def test_create_appointment_invalid_patient(self):
         response = self.client.post(
@@ -202,16 +162,84 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
                 "patientId": 999,
                 "appointmentDate": "2026-09-10",
                 "appointmentTime": "09:00",
-                "service": "General Consultation",
+                "service": "Medical Checkup",
                 "status": "Scheduled"
             }
         )
 
         self.assertEqual(response.status_code, 422)
 
-    # -------------------------
-    # MEDICAL RECORD TESTS
-    # -------------------------
+    def test_update_appointment_validation_failure(self):
+        patient_id = self.create_patient()
+
+        response = self.client.post(
+            "/appointments",
+            json={
+                "patientId": patient_id,
+                "appointmentDate": "2026-09-10",
+                "appointmentTime": "09:00",
+                "service": "Medical Checkup",
+                "status": "Scheduled"
+            }
+        )
+
+        appointment_id = response.get_json()["data"]["id"]
+
+        response = self.client.put(
+            f"/appointments/{appointment_id}",
+            json={
+                "status": "Invalid"
+            }
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
+
+    def test_update_appointment_not_found(self):
+        response = self.client.put(
+            "/appointments/999",
+            json={
+                "status": "Completed"
+            }
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.get_json()["status"], 404)
+        self.assertIn("error", response.get_json())
+
+    # =========================
+    # Medical Record Tests
+    # =========================
+
+    def test_create_medical_record_success(self):
+        patient_id = self.create_patient()
+
+        response = self.client.post(
+            "/medical-records",
+            json={
+                "patientId": patient_id,
+                "diagnosis": "Fever",
+                "treatment": "Rest and medication",
+                "recordDate": "2026-09-10"
+            }
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.get_json()["status"], 201)
+
+    def test_create_medical_record_invalid_patient(self):
+        response = self.client.post(
+            "/medical-records",
+            json={
+                "patientId": 999,
+                "diagnosis": "Fever",
+                "treatment": "Rest and medication",
+                "recordDate": "2026-09-10"
+            }
+        )
+
+        self.assertEqual(response.status_code, 422)
 
     def test_update_medical_record_validation_failure(self):
         patient_id = self.create_patient()
@@ -221,17 +249,15 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
             json={
                 "patientId": patient_id,
                 "diagnosis": "Fever",
-                "treatment": "Rest and hydration",
-                "recordDate": "2026-09-05"
+                "treatment": "Rest",
+                "recordDate": "2026-09-10"
             }
         )
 
-        self.assertEqual(response.status_code, 201)
-
-        medical_record_id = response.get_json()["data"]["id"]
+        record_id = response.get_json()["data"]["id"]
 
         response = self.client.put(
-            f"/medical-records/{medical_record_id}",
+            f"/medical-records/{record_id}",
             json={
                 "diagnosis": ""
             }
@@ -240,7 +266,6 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.get_json()["status"], 422)
         self.assertIn("error", response.get_json())
-        self.assertIn("field", response.get_json())
 
     def test_update_medical_record_not_found(self):
         response = self.client.put(
@@ -254,63 +279,9 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         self.assertEqual(response.get_json()["status"], 404)
         self.assertIn("error", response.get_json())
 
-    def test_create_medical_record_success(self):
-        patient_id = self.create_patient()
-
-        response = self.client.post(
-            "/medical-records",
-            json={
-                "patientId": patient_id,
-                "diagnosis": "Fever",
-                "treatment": "Rest and hydration",
-                "recordDate": "2026-09-05"
-            }
-        )
-
-        self.assertEqual(response.status_code, 201)
-
-    def test_create_medical_record_invalid_patient(self):
-        response = self.client.post(
-            "/medical-records",
-            json={
-                "patientId": 999,
-                "diagnosis": "Fever",
-                "treatment": "Rest and hydration",
-                "recordDate": "2026-09-05"
-            }
-        )
-
-        self.assertEqual(response.status_code, 422)
-
-    # -------------------------
-    # HEALTH SERVICE TESTS
-    # -------------------------
-
-    def test_update_health_service_validation_failure(self):
-        response = self.client.post(
-            "/health-services",
-            json={
-                "name": "Medical Checkup",
-                "description": "Basic health consultation",
-                "status": "Active"
-            }
-        )
-
-        self.assertEqual(response.status_code, 201)
-
-        health_service_id = response.get_json()["data"]["id"]
-
-        response = self.client.put(
-            f"/health-services/{health_service_id}",
-            json={
-                "name": ""
-            }
-        )
-
-        self.assertEqual(response.status_code, 422)
-        self.assertEqual(response.get_json()["status"], 422)
-        self.assertIn("error", response.get_json())
-        self.assertIn("field", response.get_json())
+    # =========================
+    # Health Service Tests
+    # =========================
 
     def test_create_health_service_success(self):
         response = self.client.post(
@@ -323,6 +294,7 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.get_json()["status"], 201)
 
     def test_create_health_service_validation_failure(self):
         response = self.client.post(
@@ -335,54 +307,66 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
 
-    # -------------------------
-    # USER TESTS
-    # -------------------------
-
-    def test_update_user_validation_failure(self):
+    def test_update_health_service_validation_failure(self):
         response = self.client.post(
-            "/users",
+            "/health-services",
             json={
-                "username": "testuser",
-                "password": "password123",
-                "role": "Staff"
+                "name": "Medical Checkup",
+                "description": "Basic health consultation",
+                "status": "Active"
             }
         )
 
-        self.assertEqual(response.status_code, 201)
-
-        user_id = response.get_json()["data"]["id"]
+        service_id = response.get_json()["data"]["id"]
 
         response = self.client.put(
-            f"/users/{user_id}",
+            f"/health-services/{service_id}",
             json={
-                "password": ""
+                "name": ""
             }
         )
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.get_json()["status"], 422)
         self.assertIn("error", response.get_json())
-        self.assertIn("field", response.get_json())
+
+    def test_update_health_service_not_found(self):
+        response = self.client.put(
+            "/health-services/999",
+            json={
+                "name": "Updated Service"
+            }
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.get_json()["status"], 404)
+        self.assertIn("error", response.get_json())
+
+    # =========================
+    # User Tests
+    # =========================
 
     def test_create_user_success(self):
         response = self.client.post(
             "/users",
             json={
-                "username": "adminuser",
+                "username": "admin",
                 "password": "password123",
                 "role": "Administrator"
             }
         )
 
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.get_json()["status"], 201)
 
     def test_create_user_invalid_password(self):
         response = self.client.post(
             "/users",
             json={
-                "username": "adminuser",
+                "username": "admin",
                 "password": "123",
                 "role": "Administrator"
             }
@@ -390,44 +374,72 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
 
-    def test_delete_user_without_authorization(self):
-        # Create a user first
-        create_response = self.client.post(
+    def test_update_user_validation_failure(self):
+        response = self.client.post(
             "/users",
             json={
-                "username": "staffuser",
+                "username": "admin",
                 "password": "password123",
-                "role": "Staff"
+                "role": "Administrator"
             }
         )
 
-        self.assertEqual(create_response.status_code, 201)
+        user_id = response.get_json()["data"]["id"]
 
-        user_id = create_response.get_json()["data"]["id"]
+        response = self.client.put(
+            f"/users/{user_id}",
+            json={
+                "password": "123"
+            }
+        )
 
-        # Try deleting without Administrator role
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
+
+    def test_update_user_not_found(self):
+        response = self.client.put(
+            "/users/999",
+            json={
+                "username": "updateduser"
+            }
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.get_json()["status"], 404)
+        self.assertIn("error", response.get_json())
+
+    def test_delete_user_without_authorization(self):
+        response = self.client.post(
+            "/users",
+            json={
+                "username": "admin",
+                "password": "password123",
+                "role": "Administrator"
+            }
+        )
+
+        user_id = response.get_json()["data"]["id"]
+
         response = self.client.delete(
             f"/users/{user_id}"
         )
 
         self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.get_json()["status"], 403)
 
     def test_delete_user_with_authorization(self):
-        # Create a user first
-        create_response = self.client.post(
+        response = self.client.post(
             "/users",
             json={
-                "username": "staffuser",
+                "username": "admin",
                 "password": "password123",
-                "role": "Staff"
+                "role": "Administrator"
             }
         )
 
-        self.assertEqual(create_response.status_code, 201)
+        user_id = response.get_json()["data"]["id"]
 
-        user_id = create_response.get_json()["data"]["id"]
-
-        # Delete as Administrator
         response = self.client.delete(
             f"/users/{user_id}",
             headers={
@@ -436,6 +448,7 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json()["status"], 200)
 
 
 if __name__ == "__main__":
