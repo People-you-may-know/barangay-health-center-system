@@ -51,18 +51,7 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # -------------------------
     # PATIENT TESTS
     # -------------------------
-    def test_update_patient_not_found(self):
-        response = self.client.put(
-            "/patients/999",
-            json={
-                "firstName": "Maria"
-            }
-        )
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.get_json()["status"], 404)
-        self.assertIn("error", response.get_json())
-    
     def test_update_patient_validation_failure(self):
         patient_id = self.create_patient()
 
@@ -127,6 +116,18 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
 
+    def test_update_patient_not_found(self):
+        response = self.client.put(
+            "/patients/999",
+            json={
+                "firstName": "Maria"
+            }
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.get_json()["status"], 404)
+        self.assertIn("error", response.get_json())
+
     def test_get_patient_not_found(self):
         response = self.client.get("/patients/999")
 
@@ -165,6 +166,18 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         self.assertEqual(response.get_json()["status"], 422)
         self.assertIn("error", response.get_json())
         self.assertIn("field", response.get_json())
+
+    def test_update_appointment_not_found(self):
+        response = self.client.put(
+            "/appointments/999",
+            json={
+                "service": "General Consultation"
+            }
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.get_json()["status"], 404)
+        self.assertIn("error", response.get_json())
 
     def test_create_appointment_success(self):
         patient_id = self.create_patient()
@@ -314,6 +327,32 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # -------------------------
     # USER TESTS
     # -------------------------
+
+    def test_update_user_validation_failure(self):
+        response = self.client.post(
+            "/users",
+            json={
+                "username": "testuser",
+                "password": "password123",
+                "role": "Staff"
+            }
+        )
+
+        self.assertEqual(response.status_code, 201)
+
+        user_id = response.get_json()["data"]["id"]
+
+        response = self.client.put(
+            f"/users/{user_id}",
+            json={
+                "password": ""
+            }
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
+        self.assertIn("field", response.get_json())
 
     def test_create_user_success(self):
         response = self.client.post(
