@@ -242,6 +242,18 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
         self.assertIn("error", response.get_json())
         self.assertIn("field", response.get_json())
 
+    def test_update_medical_record_not_found(self):
+        response = self.client.put(
+            "/medical-records/999",
+            json={
+                "diagnosis": "Updated Diagnosis"
+            }
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.get_json()["status"], 404)
+        self.assertIn("error", response.get_json())
+
     def test_create_medical_record_success(self):
         patient_id = self.create_patient()
 
