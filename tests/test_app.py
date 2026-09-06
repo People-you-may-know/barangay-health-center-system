@@ -123,7 +123,33 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # -------------------------
     # APPOINTMENT TESTS
     # -------------------------
+    def test_update_appointment_validation_failure(self):
+        patient_id = self.create_patient()
 
+        response = self.client.post(
+            "/appointments",
+            json={
+                "patientId": patient_id,
+                "appointmentDate": "2026-09-10",
+                "appointmentTime": "10:00",
+                "service": "General Checkup",
+                "status": "Scheduled"
+            }
+        )
+
+        appointment_id = response.get_json()["data"]["id"]
+
+        response = self.client.put(
+            f"/appointments/{appointment_id}",
+            json={
+                "service": ""
+            }
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["status"], 422)
+        self.assertIn("error", response.get_json())
+        self.assertIn("field", response.get_json())
     def test_create_appointment_success(self):
         patient_id = self.create_patient()
 
