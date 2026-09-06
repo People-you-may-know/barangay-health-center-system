@@ -1333,38 +1333,46 @@ app.add_url_rule(
 )
 # Health Services Routes
 
+from controllers.health_service_controller import (
+    list_health_services as controller_list_health_services,
+    show_health_service as controller_show_health_service,
+    create_health_service as controller_create_health_service,
+    update_health_service as controller_update_health_service,
+    delete_health_service as controller_delete_health_service
+)
+
 app.add_url_rule(
     "/health-services",
     "list_health_services",
-    list_health_services,
+    controller_list_health_services,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/health-services/<int:service_id>",
     "show_health_service",
-    show_health_service,
+    controller_show_health_service,
     methods=["GET"]
 )
 
 app.add_url_rule(
     "/health-services",
     "create_health_service",
-    create_health_service,
+    controller_create_health_service,
     methods=["POST"]
 )
 
 app.add_url_rule(
     "/health-services/<int:service_id>",
     "update_health_service",
-    update_health_service,
+    controller_update_health_service,
     methods=["PUT"]
 )
 
 app.add_url_rule(
     "/health-services/<int:service_id>",
     "delete_health_service",
-    delete_health_service,
+    controller_delete_health_service,
     methods=["DELETE"]
 )
 
