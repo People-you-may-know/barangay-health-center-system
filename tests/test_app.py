@@ -51,7 +51,18 @@ class TestBarangayHealthCenterSystem(unittest.TestCase):
     # -------------------------
     # PATIENT TESTS
     # -------------------------
+    def test_update_patient_not_found(self):
+        response = self.client.put(
+            "/patients/999",
+            json={
+                "firstName": "Maria"
+            }
+        )
 
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.get_json()["status"], 404)
+        self.assertIn("error", response.get_json())
+    
     def test_update_patient_validation_failure(self):
         patient_id = self.create_patient()
 
