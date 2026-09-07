@@ -3,46 +3,13 @@ from flask import jsonify, request
 from app import (
     appointments,
     validation_error,
-    get_patient_by_id
+    get_patient_by_id,
+    save_appointment,
+    get_appointments,
+    get_appointment_by_id,
+    update_appointment_by_id,
+    delete_appointment_by_id
 )
-
-
-def save_appointment(data):
-    appointment = {
-        "id": len(appointments) + 1,
-        **data
-    }
-    appointments.append(appointment)
-    return appointment
-
-
-def get_appointments():
-    return appointments
-
-
-def get_appointment_by_id(appointment_id):
-    for appointment in appointments:
-        if appointment["id"] == int(appointment_id):
-            return appointment
-    return None
-
-
-def update_appointment_by_id(appointment_id, data):
-    for index, appointment in enumerate(appointments):
-        if appointment["id"] == int(appointment_id):
-            appointments[index] = {
-                **appointment,
-                **data
-            }
-            return appointments[index]
-    return None
-
-
-def delete_appointment_by_id(appointment_id):
-    for index, appointment in enumerate(appointments):
-        if appointment["id"] == int(appointment_id):
-            return appointments.pop(index)
-    return None
 
 
 def list_appointments():
