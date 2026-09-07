@@ -1,8 +1,5 @@
 from flask import jsonify, request
 
-from app import patients, validation_error
-
-
 from app import (
     validation_error,
     save_patient,
@@ -12,18 +9,18 @@ from app import (
     delete_patient_by_id
 )
 
+
 def list_patients():
+    patients_data = get_patients()
+
     return jsonify({
         "status": 200,
-        "data": patients
+        "data": patients_data
     }), 200
 
 
 def show_patient(patient_id):
-    patient = next(
-        (p for p in patients if p["id"] == patient_id),
-        None
-    )
+    patient = get_patient_by_id(patient_id)
 
     if patient is None:
         return jsonify({
@@ -88,17 +85,7 @@ def create_patient():
             "address"
         )
 
-    patient = {
-        "id": len(patients) + 1,
-        "firstName": first_name,
-        "lastName": last_name,
-        "dateOfBirth": date_of_birth,
-        "gender": gender,
-        "contactNumber": contact_number,
-        "address": address
-    }
-
-    patients.append(patient)
+    patient = save_patient(data)
 
     return jsonify({
         "status": 201,
@@ -107,10 +94,7 @@ def create_patient():
 
 
 def update_patient(patient_id):
-    patient = next(
-        (p for p in patients if p["id"] == patient_id),
-        None
-    )
+    patient = get_patient_by_id(patient_id)
 
     if patient is None:
         return jsonify({
@@ -126,7 +110,6 @@ def update_patient(patient_id):
                 "firstName must be 1-50 characters",
                 "firstName"
             )
-        patient["firstName"] = data["firstName"]
 
     if "lastName" in data:
         if not isinstance(data["lastName"], str) or not 1 <= len(data["lastName"]) <= 50:
@@ -134,7 +117,6 @@ def update_patient(patient_id):
                 "lastName must be 1-50 characters",
                 "lastName"
             )
-        patient["lastName"] = data["lastName"]
 
     if "dateOfBirth" in data:
         if not isinstance(data["dateOfBirth"], str) or len(data["dateOfBirth"]) != 10:
@@ -142,7 +124,6 @@ def update_patient(patient_id):
                 "dateOfBirth must use YYYY-MM-DD format",
                 "dateOfBirth"
             )
-        patient["dateOfBirth"] = data["dateOfBirth"]
 
     if "gender" in data:
         if data["gender"] not in ["Male", "Female", "Other"]:
@@ -150,7 +131,6 @@ def update_patient(patient_id):
                 "gender must be Male, Female, or Other",
                 "gender"
             )
-        patient["gender"] = data["gender"]
 
     if "contactNumber" in data:
         if (
@@ -163,7 +143,6 @@ def update_patient(patient_id):
                 "contactNumber must be 11 digits and start with 09",
                 "contactNumber"
             )
-        patient["contactNumber"] = data["contactNumber"]
 
     if "address" in data:
         if not isinstance(data["address"], str) or not 5 <= len(data["address"]) <= 200:
@@ -171,19 +150,17 @@ def update_patient(patient_id):
                 "address must be 5-200 characters",
                 "address"
             )
-        patient["address"] = data["address"]
+
+    updated_patient = update_patient_by_id(patient_id, data)
 
     return jsonify({
         "status": 200,
-        "data": patient
+        "data": updated_patient
     }), 200
 
 
 def delete_patient(patient_id):
-    patient = next(
-        (p for p in patients if p["id"] == patient_id),
-        None
-    )
+    patient = get_patient_by_id(patient_id)
 
     if patient is None:
         return jsonify({
@@ -191,9 +168,9 @@ def delete_patient(patient_id):
             "error": "Patient not found"
         }), 404
 
-    patients.remove(patient)
+    deleted_patient = delete_patient_by_id(patient_id)
 
     return jsonify({
         "status": 200,
-        "data": patient
+        "data": deleted_patient
     }), 200
