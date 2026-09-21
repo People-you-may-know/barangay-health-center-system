@@ -1,1 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>No Patients - Barangay Health Center</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+            color: #333333;
+        }
+
+        header {
+            background-color: #2c7a7b;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin: 0 0 15px 0;
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 40px 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            margin: 0 0 15px 0;
+            color: #2c7a7b;
+            font-size: 26px;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        .add-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 20px;
+            background-color: #2c7a7b;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .add-button:hover {
+            background-color: #245f60;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 20px;
+            background-color: #eeeeee;
+            color: #333333;
+            text-decoration: none;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+
+        .back-button:hover {
+            background-color: #dddddd;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                margin: 30px 15px;
+                padding: 30px 20px;
+            }
+
+            header {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 20px;
+            }
+
+            nav {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>Barangay Health Center</h1>
+
+        <nav>
+            <a href="index.html">Patients</a>
+            <a href="../appointments/index.html">Appointments</a>
+            <a href="../medical-records/index.html">Medical Records</a>
+            <a href="../health-services/index.html">Health Services</a>
+            <a href="../users/index.html">Users</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <div
+            class="empty-icon"
+            aria-hidden="true"
+        >
+            👤
+        </div>
+
+        <h2>No Patient Records Found</h2>
+
+        <p>
+            There are currently no patient records in the system.
+        </p>
+
+        <p>
+            Add a new patient to begin managing patient records.
+        </p>
+
+        <a
+            href="create.html"
+            class="add-button"
+        >
+            + Add New Patient
+        </a>
+
+        <br>
+
+        <a
+            href="index.html"
+            class="back-button"
+        >
+            Back to Patient List
+        </a>
+
+    </main>
+
+</body>
+</html>
