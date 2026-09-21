@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Edit Patient - Barangay Health Center</title>
+    <title>Patient Records - Barangay Health Center</title>
 
     <style>
         * {
@@ -13,25 +13,32 @@
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background-color: #f4f6f8;
-            color: #333;
+            color: #333333;
         }
 
         header {
             background-color: #2c7a7b;
-            color: white;
+            color: #ffffff;
             padding: 20px;
         }
 
         header h1 {
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         nav a {
-            color: white;
+            color: #ffffff;
             text-decoration: none;
-            margin-right: 15px;
+            font-size: 14px;
         }
 
         nav a:hover {
@@ -39,77 +46,128 @@
         }
 
         main {
-            max-width: 700px;
+            max-width: 1100px;
             margin: 30px auto;
-            background-color: white;
-            padding: 30px;
+            padding: 25px;
+            background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
-            margin-top: 0;
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .page-header h2 {
+            margin: 0;
             color: #2c7a7b;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-top: 15px;
-            margin-bottom: 5px;
+        .add-button {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #2c7a7b;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
             font-weight: bold;
         }
 
-        input,
-        select,
-        textarea {
+        .add-button:hover {
+            background-color: #245f60;
+        }
+
+        .table-container {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
+            overflow-x: auto;
         }
 
-        textarea {
-            min-height: 100px;
-            resize: vertical;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
         }
 
-        .form-actions {
-            margin-top: 25px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #dddddd;
+            text-align: left;
         }
 
-        button {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        th {
             background-color: #2c7a7b;
-            color: white;
-            font-size: 14px;
+            color: #ffffff;
         }
 
-        button:hover {
-            opacity: 0.9;
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
         }
 
-        .cancel-link {
-            padding: 10px 18px;
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .edit-button {
+            padding: 7px 12px;
+            background-color: #eeeeee;
+            color: #333333;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
             text-decoration: none;
-            border: 1px solid #999;
-            border-radius: 5px;
-            color: #333;
-            background-color: #f5f5f5;
         }
 
-        .cancel-link:hover {
-            background-color: #e5e5e5;
+        .edit-button:hover {
+            background-color: #dddddd;
+        }
+
+        .delete-button {
+            padding: 7px 12px;
+            background-color: #b42318;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #8f1d14;
+        }
+
+        .info-message {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #eef7f7;
+            border: 1px solid #b7dddd;
+            border-radius: 5px;
+            color: #245f60;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                margin: 20px 10px;
+                padding: 15px;
+            }
+
+            header {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 20px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -117,6 +175,7 @@
 <body>
 
     <header>
+
         <h1>Barangay Health Center</h1>
 
         <nav>
@@ -126,81 +185,112 @@
             <a href="../health-services/index.html">Health Services</a>
             <a href="../users/index.html">Users</a>
         </nav>
+
     </header>
 
     <main>
 
-        <h2>Edit Patient</h2>
+        <div class="page-header">
 
-        <p>Update the patient's information below.</p>
+            <h2>Patient Records</h2>
 
-        <form>
-
-            <label for="firstName">First Name</label>
-            <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value="Juan"
-                required
+            <a
+                href="create.html"
+                class="add-button"
             >
+                + Add Patient
+            </a>
 
-            <label for="lastName">Last Name</label>
-            <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value="Dela Cruz"
-                required
-            >
+        </div>
 
-            <label for="dateOfBirth">Date of Birth</label>
-            <input
-                type="date"
-                id="dateOfBirth"
-                name="dateOfBirth"
-                value="2000-01-15"
-                required
-            >
+        <div class="table-container">
 
-            <label for="gender">Gender</label>
-            <select id="gender" name="gender" required>
-                <option value="">Select Gender</option>
-                <option value="Male" selected>Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
+            <table>
 
-            <label for="contactNumber">Contact Number</label>
-            <input
-                type="tel"
-                id="contactNumber"
-                name="contactNumber"
-                value="09123456789"
-                pattern="09[0-9]{9}"
-                maxlength="11"
-                required
-            >
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Date of Birth</th>
+                        <th>Gender</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-            <label for="address">Address</label>
-            <textarea
-                id="address"
-                name="address"
-                required
-            >Sample Barangay Address</textarea>
+                <tbody>
 
-            <div class="form-actions">
-                <button type="submit">Update Patient</button>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan</td>
+                        <td>Dela Cruz</td>
+                        <td>2000-01-15</td>
+                        <td>Male</td>
+                        <td>09123456789</td>
+                        <td>Barangay Sample</td>
 
-                <a
-                    href="index.html"
-                    class="cancel-link"
-                >
-                    Cancel
-                </a>
-            </div>
+                        <td>
+                            <div class="action-buttons">
 
-        </form>
+                                <a
+                                    href="edit.html"
+                                    class="edit-button"
+                                >
+                                    Edit
+                                </a>
+
+                                <button
+                                    type="button"
+                                    class="delete-button"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>Maria</td>
+                        <td>Santos</td>
+                        <td>2002-05-20</td>
+                        <td>Female</td>
+                        <td>09987654321</td>
+                        <td>Barangay Sample</td>
+
+                        <td>
+                            <div class="action-buttons">
+
+                                <a
+                                    href="edit.html"
+                                    class="edit-button"
+                                >
+                                    Edit
+                                </a>
+
+                                <button
+                                    type="button"
+                                    class="delete-button"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="info-message">
+            This is a static view with placeholder patient data for Week 6.
+        </div>
 
     </main>
 
