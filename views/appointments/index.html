@@ -1,1 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - Barangay Health Center</title>
 
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c7a7b;
+            color: white;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h2 {
+            color: #2c7a7b;
+        }
+
+        .add-button {
+            background-color: #2c7a7b;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e6f4f1;
+            color: #245b5c;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .scheduled {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 6px 10px;
+            margin-right: 5px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .edit-button {
+            background-color: #3182ce;
+            color: white;
+        }
+
+        .delete-button {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .info {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 92%;
+            }
+
+            .table-container {
+                padding: 10px;
+            }
+
+            th,
+            td {
+                padding: 9px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Barangay Health Center</h1>
+        <p>Patient Record and Appointment Management System</p>
+
+        <nav>
+            <a href="../patients/index.html">Patients</a>
+            <a href="index.html">Appointments</a>
+            <a href="../medical-records/index.html">Medical Records</a>
+            <a href="../health-services/index.html">Health Services</a>
+            <a href="../users/index.html">Users</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="page-header">
+            <h2>Appointment Management</h2>
+
+            <a href="create.html" class="add-button">
+                + Add Appointment
+            </a>
+        </div>
+
+        <p class="info">
+            View and manage scheduled patient appointments.
+        </p>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Dela Cruz</td>
+                        <td>2026-09-25</td>
+                        <td>09:00 AM</td>
+                        <td>Medical Checkup</td>
+                        <td>
+                            <span class="status scheduled">
+                                Scheduled
+                            </span>
+                        </td>
+                        <td>
+                            <a href="edit.html" class="action-button edit-button">
+                                Edit
+                            </a>
+
+                            <button class="action-button delete-button">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>Maria Santos</td>
+                        <td>2026-09-26</td>
+                        <td>10:30 AM</td>
+                        <td>Follow-up</td>
+                        <td>
+                            <span class="status completed">
+                                Completed
+                            </span>
+                        </td>
+                        <td>
+                            <a href="edit.html" class="action-button edit-button">
+                                Edit
+                            </a>
+
+                            <button class="action-button delete-button">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>3</td>
+                        <td>Pedro Garcia</td>
+                        <td>2026-09-27</td>
+                        <td>01:00 PM</td>
+                        <td>Consultation</td>
+                        <td>
+                            <span class="status cancelled">
+                                Cancelled
+                            </span>
+                        </td>
+                        <td>
+                            <a href="edit.html" class="action-button edit-button">
+                                Edit
+                            </a>
+
+                            <button class="action-button delete-button">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
