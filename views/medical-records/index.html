@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Records - Barangay Health Center</title>
 
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c7a7b;
+            color: white;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h2 {
+            color: #2c7a7b;
+        }
+
+        .add-button {
+            background-color: #2c7a7b;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .info {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e6f4f1;
+            color: #245b5c;
+        }
+
+        tr:hover {
+            background-color: #f8fbfb;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 6px 10px;
+            margin-right: 5px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .edit-button {
+            background-color: #3182ce;
+            color: white;
+        }
+
+        .delete-button {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 92%;
+            }
+
+            .table-container {
+                padding: 10px;
+            }
+
+            th,
+            td {
+                padding: 9px;
+                font-size: 13px;
+            }
+
+            nav a {
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Barangay Health Center</h1>
+        <p>Patient Record and Appointment Management System</p>
+
+        <nav>
+            <a href="../patients/index.html">Patients</a>
+            <a href="../appointments/index.html">Appointments</a>
+            <a href="index.html">Medical Records</a>
+            <a href="../health-services/index.html">Health Services</a>
+            <a href="../users/index.html">Users</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="page-header">
+            <h2>Medical Records</h2>
+
+            <a href="create.html" class="add-button">
+                + Add Medical Record
+            </a>
+        </div>
+
+        <p class="info">
+            View and manage patient medical records.
+        </p>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient ID</th>
+                        <th>Diagnosis</th>
+                        <th>Treatment</th>
+                        <th>Record Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>Common Cold</td>
+                        <td>Rest and medication</td>
+                        <td>2026-09-20</td>
+                        <td>
+                            <a href="edit.html" class="action-button edit-button">
+                                Edit
+                            </a>
+
+                            <button class="action-button delete-button">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>Fever</td>
+                        <td>Medication and hydration</td>
+                        <td>2026-09-21</td>
+                        <td>
+                            <a href="edit.html" class="action-button edit-button">
+                                Edit
+                            </a>
+
+                            <button class="action-button delete-button">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
