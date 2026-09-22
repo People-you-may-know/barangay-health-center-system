@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Health Services</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f3f5;
+        }
+
+        .edit {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .delete {
+            color: #dc3545;
+            text-decoration: none;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <div class="header">
+            <h1>Health Services</h1>
+
+            <a href="create.html" class="button">
+                + Add Health Service
+            </a>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Service Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>1</td>
+                    <td>General Consultation</td>
+                    <td>Basic medical consultation for patients.</td>
+                    <td class="status">Active</td>
+                    <td>
+                        <a href="edit.html" class="edit">Edit</a>
+                        <a href="#" class="delete">Delete</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td>Vaccination</td>
+                    <td>Vaccination services for eligible patients.</td>
+                    <td class="status">Active</td>
+                    <td>
+                        <a href="edit.html" class="edit">Edit</a>
+                        <a href="#" class="delete">Delete</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>3</td>
+                    <td>Health Checkup</td>
+                    <td>Routine health examination and monitoring.</td>
+                    <td class="status">Inactive</td>
+                    <td>
+                        <a href="edit.html" class="edit">Edit</a>
+                        <a href="#" class="delete">Delete</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </main>
+
+</body>
+</html>
