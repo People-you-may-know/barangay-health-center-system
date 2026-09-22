@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Medical Record - Barangay Health Center</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c7a7b;
+            color: white;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 30px auto;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #2c7a7b;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2c7a7b;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button,
+        .cancel-button {
+            padding: 11px 18px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .save-button {
+            background-color: #2c7a7b;
+            color: white;
+            border: none;
+        }
+
+        .save-button:hover {
+            background-color: #225e60;
+        }
+
+        .cancel-button {
+            background-color: #e2e8f0;
+            color: #333;
+        }
+
+        .cancel-button:hover {
+            background-color: #cbd5e0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 92%;
+            }
+
+            .form-container {
+                padding: 18px;
+            }
+
+            nav a {
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Barangay Health Center</h1>
+        <p>Patient Record and Appointment Management System</p>
+
+        <nav>
+            <a href="../patients/index.html">Patients</a>
+            <a href="../appointments/index.html">Appointments</a>
+            <a href="index.html">Medical Records</a>
+            <a href="../health-services/index.html">Health Services</a>
+            <a href="../users/index.html">Users</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="form-container">
+
+            <h2>Create Medical Record</h2>
+
+            <p class="description">
+                Enter the patient's medical record information below.
+            </p>
+
+            <form>
+
+                <div class="form-group">
+                    <label for="patientId">
+                        Patient ID <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        id="patientId"
+                        name="patientId"
+                        min="1"
+                        required
+                        placeholder="Enter patient ID"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="diagnosis">
+                        Diagnosis <span class="required">*</span>
+                    </label>
+
+                    <textarea
+                        id="diagnosis"
+                        name="diagnosis"
+                        required
+                        placeholder="Enter diagnosis"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="treatment">
+                        Treatment <span class="required">*</span>
+                    </label>
+
+                    <textarea
+                        id="treatment"
+                        name="treatment"
+                        required
+                        placeholder="Enter treatment or medication"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="recordDate">
+                        Record Date <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="date"
+                        id="recordDate"
+                        name="recordDate"
+                        required
+                    >
+                </div>
+
+                <div class="button-container">
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                    >
+                        Save Medical Record
+                    </button>
+
+                    <a
+                        href="index.html"
+                        class="cancel-button"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
