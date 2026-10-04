@@ -7,16 +7,16 @@
     const patientId = new URLSearchParams(window.location.search).get("id");
     const isEdit = Boolean(patientId);
 
-    const setStatus = (message, type = "") => {
-        if (!status) return;
-        status.textContent = message;
-        status.className = `form-status ${type}`;
+    const show = (message, type = "info", retry = null) => {
+        if (window.AppFeedback) {
+            window.AppFeedback.show(status, message, type, retry);
+        } else if (status) {
+            status.textContent = message;
+        }
     };
 
     const clearErrors = () => {
-        form.querySelectorAll(".field-error").forEach((element) => {
-            element.textContent = "";
-        });
+        form.querySelectorAll(".field-error").forEach((element) => element.textContent = "");
     };
 
     const showFieldError = (field, message) => {
@@ -31,7 +31,8 @@
             : (isEdit ? "Update Patient" : "Save Patient");
     };
 
-    const parseResponse = async (response) => {
+    const request = async (url, options = {}) => {
+        const response = await fetch(url, options);
         const data = await response.json().catch(() => ({}));
         return { response, data };
     };
@@ -39,19 +40,18 @@
     const loadPatient = async () => {
         if (!isEdit) return;
 
-        setStatus("Loading patient...", "loading");
+        show("Loading patient...", "loading");
 
         try {
-            const { response, data } = await parseResponse(
-                await fetch(`/patients/${patientId}`)
-            );
+            const { response, data } = await request(`/patients/${patientId}`);
+
+            if (response.status === 404) {
+                show("Patient not found. Check the patient ID and try again.", "error", loadPatient);
+                return;
+            }
 
             if (!response.ok) {
-                if (response.status === 404) {
-                    setStatus("Patient not found.", "error");
-                } else {
-                    setStatus(data.error || "Unable to load patient.", "error");
-                }
+                show("We couldn't load this patient. Please try again.", "error", loadPatient);
                 return;
             }
 
@@ -63,59 +63,52 @@
 
             const idDisplay = document.querySelector("#patient-id");
             if (idDisplay) idDisplay.textContent = patient.id;
-
-            setStatus("Patient loaded.", "success");
+            show("Patient loaded.", "success");
         } catch (error) {
-            setStatus("Network error. Could not load the patient.", "error");
+            show("We couldn't connect to the server. Check your connection and try again.", "error", loadPatient);
         }
     };
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         clearErrors();
+
+        if (!form.reportValidity()) return;
+
         setSaving(true);
-        setStatus(isEdit ? "Updating patient..." : "Saving patient...", "loading");
+        show(isEdit ? "Updating patient..." : "Saving patient...", "loading");
 
         const payload = Object.fromEntries(new FormData(form).entries());
+        const url = isEdit ? `/patients/${patientId}` : "/patients";
+        const options = {
+            method: isEdit ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        };
 
         try {
-            const response = await fetch(
-                isEdit ? `/patients/${patientId}` : "/patients",
-                {
-                    method: isEdit ? "PUT" : "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                }
-            );
-
-            const { data } = await parseResponse(response);
+            const { response, data } = await request(url, options);
 
             if (response.status === 422) {
-                showFieldError(data.field, data.error || "Invalid value.");
-                setStatus("Please correct the highlighted field.", "error");
+                showFieldError(data.field, data.error || "Please correct this field.");
+                show("Please correct the highlighted field and try again.", "error");
                 return;
             }
 
             if (response.status === 404) {
-                setStatus("Patient not found.", "error");
+                show("Patient not found. The record may have been removed.", "error");
                 return;
             }
 
             if (!response.ok) {
-                setStatus(data.error || "The server could not save the patient.", "error");
+                show("We couldn't save the patient. Please try again.", "error", () => form.requestSubmit());
                 return;
             }
 
-            setStatus(
-                isEdit ? "Patient updated successfully." : "Patient created successfully.",
-                "success"
-            );
-
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 500);
+            show(isEdit ? "Patient updated successfully." : "Patient created successfully.", "success");
+            setTimeout(() => { window.location.href = "index.html"; }, 700);
         } catch (error) {
-            setStatus("Network error. Please check that the server is running.", "error");
+            show("We couldn't connect to the server. Check your connection and try again.", "error", () => form.requestSubmit());
         } finally {
             setSaving(false);
         }
