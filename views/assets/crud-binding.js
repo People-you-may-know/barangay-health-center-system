@@ -51,7 +51,7 @@
             const value = item[c.key];
             return `<td>${escapeHtml(value)}</td>`;
           }).join("");
-          return `<tr>${cells}<td class="action-buttons"><a class="edit-button" href="edit.html?id=${encodeURIComponent(item.id)}">Edit</a><button class="delete-button" data-id="${escapeHtml(item.id)}">Delete</button></td></tr>`;
+          return `<tr>${cells}<td class="action-buttons"><a class="edit-button" href="detail.html?id=${encodeURIComponent(item.id)}">View</a><a class="edit-button" href="edit.html?id=${encodeURIComponent(item.id)}">Edit</a><button class="delete-button" data-id="${escapeHtml(item.id)}">Delete</button></td></tr>`;
         }).join("");
         feedback(status, "Records loaded successfully.", "success");
       } catch {
