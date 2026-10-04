@@ -82,7 +82,7 @@ async function dashboard() {
   const completedPct = statusTotal ? Math.round(d.completedAppointments / statusTotal * 100) : 0;
   const cancelledPct = statusTotal ? Math.round(d.cancelledAppointments / statusTotal * 100) : 0;
 
-  $("#main").innerHTML = shell("Dashboard", '<button type="button" class="primary" onclick='load("patients")'>+ Add / Manage Patients</button>') + `
+  $("#main").innerHTML = shell("Dashboard", `<button type="button" class="primary" onclick="load('patients')">+ Add / Manage Patients</button>`) + `
     <div class="cards dashboard-stats">
       ${statCard("Total Patients", d.patients, "👥")}
       ${statCard("Appointments", d.appointments, "📅")}
