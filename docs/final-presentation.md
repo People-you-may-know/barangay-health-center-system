@@ -1,6 +1,6 @@
 # Deliverable 4 — Final Presentation & Live Demo
 
-The course handout requires the presentation to follow **problem → solution → architecture → demo → lessons** and include a live demo. fileciteturn215file0L14-L16
+The course handout requires the presentation to follow **problem → solution → architecture → demo → lessons** and include a live demo.
 
 ## Slide 1 — Title
 **Barangay Health Center Patient Record and Appointment Management System**
@@ -62,7 +62,7 @@ Do not show only the happy path. Demonstrate:
 - missing record
 - retry behavior
 
-The handout specifically warns against demonstrating only the happy path. fileciteturn215file0L49-L53
+The handout specifically warns against demonstrating only the happy path.
 
 ## Slide 8 — Lessons
 - Reusable components reduce duplicated UI logic.
@@ -85,8 +85,8 @@ Keep ready:
 - test results
 - repository/PR link
 
-A backup is important because the handout explicitly cautions against a live demo with no backup. fileciteturn215file0L49-L51
+A backup is important because the handout explicitly cautions against a live demo with no backup.
 
 ## Defense preparation
 
-Each student should be able to explain their own commits without AI or teammate assistance. The handout gives the unassisted defense 25 individual points and states that a student who cannot defend their code cannot pass the individual half on commits alone. fileciteturn215file0L31-L38
+Each student should be able to explain their own commits without AI or teammate assistance. The handout gives the unassisted defense 25 individual points and states that a student who cannot defend their code cannot pass the individual half on commits alone.
