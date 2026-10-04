@@ -3,6 +3,9 @@ from datetime import datetime
 from functools import wraps
 
 import mysql.connector
+from dotenv import load_dotenv
+
+load_dotenv()
 from flask import Flask, jsonify, request, session, send_from_directory
 from werkzeug.security import check_password_hash, generate_password_hash
 
