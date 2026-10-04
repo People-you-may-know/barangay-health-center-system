@@ -3,7 +3,7 @@
 ## BUG-001 — Invalid calendar dates can pass date validation
 
 **Severity:** P1 — significant data-integrity problem with a workaround.  
-**Status:** Open — intentionally not fixed during Week 10 feature freeze.  
+**Status:** Fixed in Week 11 branch; pending reviewed PR/merge.  
 **Area:** Patient creation/update
 
 ### Steps to reproduce
@@ -14,14 +14,17 @@
 ### Expected
 The API should reject a date that is not a real calendar date and return a 422 validation response.
 
-### Actual
-The current backend checks that the date is a string of length 10, but does not validate whether the month/day combination is an actual calendar date.
+### Actual (Week 10)
+The backend checked only that the date was a string of length 10, so an impossible month/day combination could be accepted.
+
+### Week 11 fix
+The API now parses the value as a real YYYY-MM-DD calendar date. Impossible dates return HTTP 422.
 
 ### Impact
 Invalid patient dates can enter the in-memory data store, reducing data quality.
 
 ### Next action
-Fix date parsing/validation in the Week 11 bug-fix cycle. Do not fix it in the Week 10 feature-freeze branch.
+Fixed by validating the value with real YYYY-MM-DD calendar parsing. The change is covered by automated tests for impossible dates and leap-year behavior.
 
 ## QA note
 This finding was identified from the adversarial invalid-input scenario and current backend validation logic. Browser/manual execution should be repeated by the team and the observed result added to the reproduction record.
