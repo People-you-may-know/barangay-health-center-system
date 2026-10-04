@@ -1,5 +1,8 @@
 import os
 import mysql.connector
+from dotenv import load_dotenv
+
+load_dotenv()
 from werkzeug.security import generate_password_hash
 
 db = mysql.connector.connect(
