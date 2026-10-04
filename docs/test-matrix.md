@@ -20,7 +20,7 @@
 | Medical records API | PASS — valid record path exists | PASS — text/date limits are validated | PASS — invalid patient/date/text is rejected | PASS — required fields are rejected | N/A |
 | Health services API | PASS — valid service path exists | PASS — name/description limits are validated | PASS — invalid status/text is rejected | PASS — required fields are rejected | N/A |
 | User API | PASS — valid user path exists | PASS — username/password limits are validated | PASS — invalid role/credentials are rejected | PASS — required fields are rejected | PASS — DELETE requires Administrator |
-| Patient date validation | FAIL — a value such as 2026-99-99 has length 10 but is not a real date | FAIL — invalid month/day values are not rejected by length-only validation | FAIL — malformed calendar dates can reach storage | N/A | N/A |
+| Patient date validation | PASS — valid YYYY-MM-DD dates are accepted | PASS — leap-day and month-length rules are enforced | PASS — impossible calendar dates return 422 | N/A | N/A |
 
 ## Adversarial session checklist
 
@@ -38,3 +38,11 @@
 ## QA status
 
 The matrix is prepared from the current application behavior and the Week 10 adversarial checklist. Browser-based manual execution still needs to be performed by the team and recorded here before final sign-off.
+
+
+## Week 11 verification additions
+
+- Impossible date: `2026-99-99` → expected 422.
+- Non-leap-year February 29: `2025-02-29` → expected 422.
+- Valid leap day: `2024-02-29` → expected 201.
+- Production debug setting is controlled by `APP_DEBUG` and should be false on the host.
