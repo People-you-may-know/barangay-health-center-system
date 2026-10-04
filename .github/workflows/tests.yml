@@ -7,10 +7,60 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: barangay_health_center
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: barangay_health_center
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - run: pip install -r requirements.txt
+
+      - name: Initialize MySQL schema
+        run: |
+          python - <<'PY'
+          import mysql.connector
+          with open("schema.sql", encoding="utf-8") as f:
+              schema = f.read()
+          statements = [
+              s.strip() for s in schema.split(";")
+              if s.strip()
+              and not s.strip().upper().startswith("CREATE DATABASE")
+              and not s.strip().upper().startswith("USE BARANGAY_HEALTH_CENTER")
+          ]
+          con = mysql.connector.connect(
+              host="127.0.0.1",
+              port=3306,
+              user="root",
+              password="root",
+              database="barangay_health_center",
+          )
+          cur = con.cursor()
+          for statement in statements:
+              cur.execute(statement)
+          con.commit()
+          cur.close()
+          con.close()
+          print("MySQL schema initialized.")
+          PY
+
       - run: python -m unittest discover -s tests -p "test_*.py"
