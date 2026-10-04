@@ -3,6 +3,7 @@ from flask import jsonify, request
 from app import (
     validation_error,
     save_patient,
+    is_valid_iso_date,
     get_patients,
     get_patient_by_id,
     update_patient_by_id,
@@ -56,9 +57,9 @@ def create_patient():
             "lastName"
         )
 
-    if not isinstance(date_of_birth, str) or len(date_of_birth) != 10:
+    if not is_valid_iso_date(date_of_birth):
         return validation_error(
-            "dateOfBirth must use YYYY-MM-DD format",
+            "dateOfBirth must use YYYY-MM-DD format and be a valid calendar date",
             "dateOfBirth"
         )
 
@@ -119,9 +120,9 @@ def update_patient(patient_id):
             )
 
     if "dateOfBirth" in data:
-        if not isinstance(data["dateOfBirth"], str) or len(data["dateOfBirth"]) != 10:
+        if not is_valid_iso_date(data["dateOfBirth"]):
             return validation_error(
-                "dateOfBirth must use YYYY-MM-DD format",
+                "dateOfBirth must use YYYY-MM-DD format and be a valid calendar date",
                 "dateOfBirth"
             )
 
