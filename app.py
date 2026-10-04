@@ -1,5 +1,6 @@
 import os
 import re
+import sqlite3
 from datetime import datetime
 from functools import wraps
 
@@ -51,6 +52,38 @@ class DBConfig(dict):
 
 
 DB = DBConfig()
+IS_SQLITE = False
+
+
+def get_sqlite_con():
+    con = sqlite3.connect("barangay_health_center.db")
+    con.row_factory = sqlite3.Row
+    con.create_function("CONCAT", -1, lambda *args: "".join(str(a) if a is not None else "" for a in args))
+    con.create_function("CURDATE", 0, lambda: datetime.now().strftime("%Y-%m-%d"))
+    con.create_function("TIME_FORMAT", 2, lambda t, fmt: str(t)[:5] if t is not None else "")
+    
+    cur = con.cursor()
+    cur.execute("""CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, full_name TEXT NOT NULL, role TEXT NOT NULL DEFAULT 'Staff', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    cur.execute("""CREATE TABLE IF NOT EXISTS patients (id INTEGER PRIMARY KEY AUTOINCREMENT, first_name TEXT NOT NULL, last_name TEXT NOT NULL, date_of_birth DATE NOT NULL, gender TEXT NOT NULL, contact_number TEXT NOT NULL, address TEXT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    cur.execute("""CREATE TABLE IF NOT EXISTS health_services (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, description TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Active')""")
+    cur.execute("""CREATE TABLE IF NOT EXISTS appointments (id INTEGER PRIMARY KEY AUTOINCREMENT, patient_id INTEGER NOT NULL, appointment_date DATE NOT NULL, appointment_time TIME NOT NULL, service TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Scheduled', notes TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    cur.execute("""CREATE TABLE IF NOT EXISTS medical_records (id INTEGER PRIMARY KEY AUTOINCREMENT, patient_id INTEGER NOT NULL, diagnosis TEXT NOT NULL, treatment TEXT NOT NULL, record_date DATE NOT NULL, notes TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    
+    # Seed default health services if empty
+    cur.execute("SELECT COUNT(*) AS c FROM health_services")
+    if cur.fetchone()[0] == 0:
+        cur.executemany(
+            "INSERT INTO health_services (name, description, status) VALUES (?, ?, ?)",
+            [
+                ('General Consultation', 'Basic consultation and health assessment', 'Active'),
+                ('Immunization', 'Routine vaccination and immunization services', 'Active'),
+                ('Maternal Care', 'Prenatal and maternal health services', 'Active'),
+                ('Child Health', 'Growth monitoring and child wellness services', 'Active'),
+                ('Family Planning', 'Family planning counseling and services', 'Active')
+            ]
+        )
+    con.commit()
+    return con
 
 
 def db():
@@ -92,17 +125,41 @@ def db():
 
 
 def q(sql, params=(), fetch=False):
-    con = db()
-    cur = con.cursor(dictionary=True)
-    try:
-        cur.execute(sql, params)
-        if fetch:
-            return cur.fetchall()
-        con.commit()
-        return cur.lastrowid
-    finally:
-        cur.close()
-        con.close()
+    global IS_SQLITE
+    if not IS_SQLITE:
+        try:
+            con = db()
+            cur = con.cursor(dictionary=True)
+            try:
+                cur.execute(sql, params)
+                if fetch:
+                    return cur.fetchall()
+                con.commit()
+                return cur.lastrowid
+            finally:
+                cur.close()
+                con.close()
+        except Exception:
+            IS_SQLITE = True
+
+    if IS_SQLITE:
+        con = get_sqlite_con()
+        cur = con.cursor()
+        try:
+            sql_sqlite = sql.replace("%s", "?")
+            cur.execute(sql_sqlite, params)
+            if fetch:
+                res = cur.fetchall()
+                return [dict(r) for r in res]
+            con.commit()
+            return cur.lastrowid
+        except sqlite3.IntegrityError as ie:
+            if "UNIQUE" in str(ie):
+                raise mysql.connector.Error(errno=1062, msg=str(ie))
+            raise
+        finally:
+            cur.close()
+            con.close()
 
 
 class TableManager:
@@ -110,6 +167,19 @@ class TableManager:
         self.name = name
 
     def clear(self):
+        global IS_SQLITE
+        if IS_SQLITE:
+            con = get_sqlite_con()
+            cur = con.cursor()
+            try:
+                cur.execute(f"DELETE FROM `{self.name}`")
+                cur.execute(f"DELETE FROM sqlite_sequence WHERE name='{self.name}'")
+                con.commit()
+            finally:
+                cur.close()
+                con.close()
+            return
+
         con = db()
         cur = con.cursor()
         try:
