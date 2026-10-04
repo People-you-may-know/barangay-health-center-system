@@ -148,3 +148,26 @@
   });
   loadRecord();
 })();
+
+(() => {
+  const detail = document.querySelector("[data-crud-detail]");
+  if (!detail) return;
+  const endpoint = detail.dataset.endpoint;
+  const id = new URLSearchParams(location.search).get("id");
+  const status = document.querySelector("#detail-status");
+  const target = document.querySelector("#detail-content");
+  const fields = JSON.parse(detail.dataset.fields || "[]");
+  const load = async () => {
+    if (!id) { status.textContent = "A record ID is required."; status.className = "feedback feedback-error"; return; }
+    status.textContent = "Loading record..."; status.className = "feedback feedback-loading";
+    try {
+      const response = await fetch(endpoint + "/" + encodeURIComponent(id));
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) { status.textContent = response.status === 404 ? "We couldn't find that record." : "We couldn't load this record. Please try again."; status.className = "feedback feedback-error"; return; }
+      const record = data.data || {};
+      target.innerHTML = fields.map(f => '<div class="detail-row"><strong>' + escapeHtml(f.label) + '</strong><span>' + escapeHtml(record[f.key]) + '</span></div>').join("");
+      status.textContent = "Record loaded successfully."; status.className = "feedback feedback-success";
+    } catch { status.textContent = "We couldn't connect to the server. Check your connection and try again."; status.className = "feedback feedback-error"; }
+  };
+  load();
+})();
