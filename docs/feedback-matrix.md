@@ -1,13 +1,19 @@
-# Week 8 Feedback Matrix
+# Deliverable 3 Feedback Matrix
 
-| Action | Loading | Success | Error |
-|---|---|---|---|
-| Create patient | Save button disabled and “Saving...” shown | Success message, then return to list | Inline 422 field errors; helpful retry for server/network errors |
-| Load patient list | Loading message and table placeholder | Rows render and success feedback | Helpful error with Retry |
-| Load patient for edit | Loading message | Form is populated | 404 not-found message or Retry for server/network failure |
-| Update patient | Update button disabled and “Updating...” shown | Success message, then return to list | Inline 422 errors; 404 not-found; Retry for server/network failure |
-| Delete patient | Delete button disabled and “Deleting...” shown | List refreshes and deletion is confirmed | 404 message or Retry for server/network failure |
+| Action | Loading | Success | 422 | 404 | 403 | 500/server | Network |
+|---|---|---|---|---|---|---|---|
+| List records | Loading table + status | Records render | — | Human-readable failure | Permission message | Retry message | Connection + Retry |
+| Load detail | Loading detail | Detail renders | — | Record not found | Permission message | Retry message | Connection + Retry |
+| Create | Button disabled + Saving... | Success then return to list | Inline field error | Human-readable failure | Permission message | Retry | Connection + Retry |
+| Update | Button disabled + Updating... | Success then return to list | Inline field error | Record not found | Permission message | Retry | Connection + Retry |
+| Delete | Delete button disabled + Deleting... | List refresh + confirmation | — | Record not found | Permission message | Retry | Connection + Retry |
 
-## Shared behavior
+## Messaging rules
 
-All patient screens use the shared `AppFeedback` helper for consistent loading, success, and error presentation. Destructive delete actions require confirmation before the request is sent.
+- No raw HTTP status codes are displayed to users.
+- No stack traces or internal exception text are displayed.
+- 422 validation feedback is shown beside the relevant field.
+- 404 explains that the requested record could not be found.
+- 500/server failures explain that the server could not complete the request and provide Retry.
+- Network failures explain that the application could not connect and provide Retry.
+- Destructive delete actions require confirmation.
