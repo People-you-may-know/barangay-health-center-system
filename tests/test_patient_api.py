@@ -28,6 +28,30 @@ class PatientApiReviewTests(unittest.TestCase):
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.get_json()["field"], "firstName")
 
+
+    def test_invalid_calendar_date_returns_422(self):
+        response = self.client.post(
+            "/patients",
+            json={**self.patient_payload(), "dateOfBirth": "2026-99-99"}
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["field"], "dateOfBirth")
+
+    def test_non_leap_day_returns_422(self):
+        response = self.client.post(
+            "/patients",
+            json={**self.patient_payload(), "dateOfBirth": "2025-02-29"}
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.get_json()["field"], "dateOfBirth")
+
+    def test_valid_leap_day_returns_201(self):
+        response = self.client.post(
+            "/patients",
+            json={**self.patient_payload(), "dateOfBirth": "2024-02-29"}
+        )
+        self.assertEqual(response.status_code, 201)
+
     def test_missing_patient_returns_404(self):
         response = self.client.get("/patients/999")
         self.assertEqual(response.status_code, 404)
