@@ -23,8 +23,10 @@ patients = []
 
 
 def save_patient(data):
+    # Keep IDs unique even when an earlier patient has been deleted.
+    next_id = max((patient["id"] for patient in patients), default=0) + 1
     patient = {
-        "id": len(patients) + 1,
+        "id": next_id,
         **data
     }
     patients.append(patient)
