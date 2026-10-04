@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Error - Barangay Health Center</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c7a7b;
+            color: white;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .error-container {
+            background-color: white;
+            text-align: center;
+            padding: 50px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .error-icon {
+            font-size: 55px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #c53030;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #2c7a7b;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background-color: #225e60;
+        }
+
+        .back-button {
+            background-color: #e2e8f0;
+            color: #333;
+        }
+
+        .back-button:hover {
+            background-color: #cbd5e0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 92%;
+            }
+
+            nav a {
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Barangay Health Center</h1>
+        <p>Patient Record and Appointment Management System</p>
+
+        <nav>
+            <a href="../patients/index.html">Patients</a>
+            <a href="index.html">Appointments</a>
+            <a href="../medical-records/index.html">Medical Records</a>
+            <a href="../health-services/index.html">Health Services</a>
+            <a href="../users/index.html">Users</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="error-container">
+
+            <div class="error-icon">⚠️</div>
+
+            <h2>Unable to Load Appointments</h2>
+
+            <p>
+                Something went wrong while loading the appointment records.
+                Please try again or return to the appointment list.
+            </p>
+
+            <a href="index.html" class="button">
+                Try Again
+            </a>
+
+            <a href="create.html" class="button">
+                Create Appointment
+            </a>
+
+            <a href="../patients/index.html" class="button back-button">
+                Back to Patients
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
