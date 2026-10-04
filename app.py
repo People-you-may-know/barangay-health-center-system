@@ -1,6 +1,21 @@
+import os
+from datetime import datetime
+
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+app.config["DEBUG"] = os.getenv("APP_DEBUG", "false").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def is_valid_iso_date(value):
+    """Return True only for real YYYY-MM-DD calendar dates."""
+    if not isinstance(value, str) or len(value) != 10:
+        return False
+    try:
+        datetime.strptime(value, "%Y-%m-%d")
+    except ValueError:
+        return False
+    return True
 
 
 # =====================================================
@@ -123,9 +138,9 @@ def create_patient():
             "dateOfBirth"
         )
 
-    if len(data["dateOfBirth"]) != 10:
+    if not is_valid_iso_date(data["dateOfBirth"]):
         return validation_error(
-            "dateOfBirth must use YYYY-MM-DD format",
+            "dateOfBirth must use YYYY-MM-DD format and be a valid calendar date",
             "dateOfBirth"
         )
 
@@ -216,9 +231,9 @@ def update_patient(patient_id):
                 "dateOfBirth"
             )
 
-        if len(data["dateOfBirth"]) != 10:
+        if not is_valid_iso_date(data["dateOfBirth"]):
             return validation_error(
-                "dateOfBirth must use YYYY-MM-DD format",
+                "dateOfBirth must use YYYY-MM-DD format and be a valid calendar date",
                 "dateOfBirth"
             )
 
@@ -1428,4 +1443,4 @@ app.add_url_rule(
 # =====================================================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=app.config["DEBUG"], host=os.getenv("APP_HOST", "127.0.0.1"), port=int(os.getenv("APP_PORT", "5000")) )
