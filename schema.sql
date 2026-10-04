@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS barangay_health_center CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE barangay_health_center;
+
+CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(50) NOT NULL UNIQUE, password_hash VARCHAR(255) NOT NULL, full_name VARCHAR(100) NOT NULL, role ENUM('Administrator','Staff') NOT NULL DEFAULT 'Staff', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE patients (id INT AUTO_INCREMENT PRIMARY KEY, first_name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, date_of_birth DATE NOT NULL, gender ENUM('Male','Female','Other') NOT NULL, contact_number VARCHAR(11) NOT NULL, address VARCHAR(200) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE health_services (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL UNIQUE, description VARCHAR(500) NOT NULL, status ENUM('Active','Inactive') NOT NULL DEFAULT 'Active');
+CREATE TABLE appointments (id INT AUTO_INCREMENT PRIMARY KEY, patient_id INT NOT NULL, appointment_date DATE NOT NULL, appointment_time TIME NOT NULL, service VARCHAR(100) NOT NULL, status ENUM('Scheduled','Completed','Cancelled') NOT NULL DEFAULT 'Scheduled', notes VARCHAR(500), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(patient_id) REFERENCES patients(id) ON DELETE CASCADE);
+CREATE TABLE medical_records (id INT AUTO_INCREMENT PRIMARY KEY, patient_id INT NOT NULL, diagnosis VARCHAR(500) NOT NULL, treatment VARCHAR(500) NOT NULL, record_date DATE NOT NULL, notes VARCHAR(500), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(patient_id) REFERENCES patients(id) ON DELETE CASCADE);
+
+INSERT IGNORE INTO health_services(name,description,status) VALUES ('General Consultation','Basic consultation and health assessment','Active'),('Immunization','Routine vaccination and immunization services','Active'),('Maternal Care','Prenatal and maternal health services','Active'),('Child Health','Growth monitoring and child wellness services','Active'),('Family Planning','Family planning counseling and services','Active');
