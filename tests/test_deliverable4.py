@@ -28,7 +28,8 @@ class Deliverable4MySQLTestCase(unittest.TestCase):
         cur.close()
         con.close()
 
-        schema = open("schema.sql", encoding="utf-8").read()
+        with open("schema.sql", encoding="utf-8") as f:
+            schema = f.read()
         statements = [
             s.strip()
             for s in schema.split(";")
