@@ -1,10 +1,8 @@
 # Week 12 — Final Submission Checklist
 
-Based on the Week 12 lab requirements.
-
 ## Retrospective
 
-- [x] `docs/retrospective.md` exists.
+- [x] `docs/retrospective.md` exists and reflects the current Railway/MySQL deployment.
 - [ ] Team reviews and adjusts retrospective answers based on actual experience.
 
 ## Presentation
@@ -16,10 +14,26 @@ Based on the Week 12 lab requirements.
 
 ## Deployment
 
-- [ ] Final public URL is recorded in `docs/deployment.md`.
-- [ ] Live app is tested outside localhost.
-- [ ] Create/view/edit/delete happy path passes on the deployed app.
-- [ ] Invalid input produces the expected validation feedback on the deployed app.
+- [x] Final public URL is recorded in `docs/deployment.md`.
+- [x] Public Railway application is reachable.
+- [x] Login and dashboard were verified.
+- [ ] Create/view/edit/delete production smoke test completed for all required modules.
+- [ ] Invalid input produces verified validation feedback on the deployed app.
+- [ ] Missing-record and failure/retry behavior verified on the deployed app.
+
+## QA
+
+- [x] Week 10 test matrix exists.
+- [x] Critical-path automated tests exist.
+- [ ] Final CI test run is green for the current release candidate.
+- [ ] All P0/P1 release blockers are closed.
+- [ ] Manual/adversarial QA evidence is recorded.
+
+## Code review
+
+- [x] Week 11 API detail-route fix submitted in PR #183.
+- [x] Teammate review requested for PR #183.
+- [ ] Teammate completes a substantive review and the PR is merged according to team policy.
 
 ## Defense
 
@@ -31,7 +45,6 @@ Based on the Week 12 lab requirements.
 
 ## Final repository
 
-- [ ] Week 11 PR reviewed and merged according to team policy.
-- [ ] Week 12 PR reviewed.
 - [ ] Final commit history and board contributions are visible.
-- [ ] Final Deliverable 4 submission is packaged.
+- [ ] Backup demo evidence is prepared.
+- [ ] Deliverable 4 is submitted only after the actual release gate is satisfied.
