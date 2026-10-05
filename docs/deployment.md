@@ -1,81 +1,106 @@
 # Week 11 / Deliverable 4 — Deployment Guide
 
+## Production platform
+
+The application is deployed on **Railway**.
+
+- **Web service:** Railway `web` service
+- **Public URL:** https://web-production-64a9f1.up.railway.app
+- **Database:** Railway MySQL service
+- **Runtime:** Gunicorn serving Flask
+- **Production debug:** disabled with `APP_DEBUG=false`
+
 ## Environment configuration
 
-Set these variables on the deployment host as required by the current application:
+The Railway web service uses environment variables for production-specific configuration:
 
-- `APP_DEBUG=false` — keeps Flask debug mode disabled in production.
-- `APP_HOST=0.0.0.0` — binds the web process to the host interface.
-- `APP_PORT` — use the port supplied by the hosting platform when required.
-- For the MySQL-backed variant, configure the database variables documented in `.env.mysql.example`.
+- `APP_DEBUG=false`
+- `APP_HOST=0.0.0.0`
+- `APP_PORT=${{PORT}}`
+- `DB_HOST=${{MySQL.MYSQLHOST}}`
+- `DB_PORT=${{MySQL.MYSQLPORT}}`
+- `DB_USER=${{MySQL.MYSQLUSER}}`
+- `DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}`
+- `DB_NAME=${{MySQL.MYSQLDATABASE}}`
+- `SECRET_KEY` set as a Railway environment variable
 
-Do not commit `.env` or real credentials. Use the example environment files only as templates.
+No real credentials should be committed to the repository. The example environment files remain templates only.
 
-## Local pre-deployment checks
+## Database setup
 
-1. Create a virtual environment.
-2. Install dependencies:
-   `pip install -r requirements.txt`
-3. Run the automated suite:
-   `python -m unittest discover -s tests -p "test_*.py" -v`
-4. Start locally:
-   `python app.py`
-5. Verify the CRUD flows and failure states from `docs/test-matrix.md`.
+The Railway MySQL service was provisioned separately from the web service. The production database initially existed without the application's tables, so the schema was initialized in the Railway `railway` database using MySQL Workbench.
 
-## Production build and start
+The following application tables are present:
 
-Install dependencies:
+- `users`
+- `patients`
+- `health_services`
+- `appointments`
+- `medical_records`
 
-```bash
-pip install -r requirements.txt
-```
+The application successfully created the default administrator after the `users` table existed.
 
-Start the production WSGI process:
+## Deployment verification completed
 
-```bash
-gunicorn app:app
-```
+Verified on the deployed public application:
 
-The repository includes `Procfile` and `render.yaml` for a reproducible Render deployment configuration.
+- Public HTTPS URL loads successfully.
+- Login works against Railway MySQL.
+- The authenticated dashboard opens successfully.
+- Railway MySQL connectivity is working.
+- The production database contains the required application tables.
 
-## Render deployment
+## Remaining release verification
 
-1. Create a new Web Service from the GitHub repository.
-2. Use the repository's `render.yaml`, or configure:
-   - Build command: `pip install -r requirements.txt`
-   - Start command: `gunicorn app:app`
-3. Configure required environment variables and database credentials when using the MySQL-backed variant.
-4. Deploy from the intended release branch.
-5. Open the generated HTTPS URL.
-6. Verify patients, appointments, medical records, health services, and users.
-7. Verify a bad request produces a visible error instead of a crash.
-8. Record the final public URL and deployed commit below.
+The following still require a final production smoke test before claiming the entire Deliverable 4 release gate is complete:
 
-## Database note
+- Create patient
+- View patient
+- Edit patient
+- Delete patient
+- Create/view/edit/delete appointments
+- Create/view/edit/delete medical records
+- Create/view/edit/delete health services
+- User-management permission checks
+- Invalid input produces visible validation feedback
+- Missing record produces the expected not-found feedback
+- Failure/retry behavior is verified on the deployed application
 
-The repository has both the earlier in-memory Flask implementation and a MySQL-backed implementation in the project's development history. The deployment target must be matched to the branch being released. If the MySQL-backed implementation is deployed, create the schema from `schema.sql` and create the initial administrator with `setup_admin.py` before the production smoke test.
+## Production smoke-test checklist
+
+| Test | Expected result | Status |
+|---|---|---|
+| Public HTTPS URL | Application loads | ✅ Verified |
+| Login | Administrator can sign in | ✅ Verified |
+| Dashboard | Dashboard opens after login | ✅ Verified |
+| Patient CRUD | Create/read/update/delete work | ⬜ Pending final smoke test |
+| Appointment CRUD | Create/read/update/delete work | ⬜ Pending final smoke test |
+| Medical-record CRUD | Create/read/update/delete work | ⬜ Pending final smoke test |
+| Health-service CRUD | Create/read/update/delete work | ⬜ Pending final smoke test |
+| User permissions | Unauthorized actions are blocked | ⬜ Pending final smoke test |
+| Invalid data | Visible validation error, no crash | ⬜ Pending final smoke test |
+| Missing record | Clear 404/not-found state | ⬜ Pending final smoke test |
+| Failure/retry | Human-readable failure + retry where safe | ⬜ Pending final smoke test |
 
 ## Live deployment record
 
-**Host:** Pending team selection
+**Host:** Railway
 
-**Public URL:** Pending deployment
+**Public URL:** https://web-production-64a9f1.up.railway.app
 
-**Deployed commit:** Pending deployment
+**Database:** Railway MySQL
+
+**Release note:** Deployment is live and login/dashboard have been verified. Full production CRUD and failure-path smoke testing remains a release-gate task.
 
 ## Security/release checklist
 
-- [ ] No passwords, API keys, or real credentials committed.
-- [ ] Production debug mode is disabled.
-- [ ] HTTPS is enabled.
-- [ ] Required environment variables are configured.
-- [ ] Database schema/admin setup completed if deploying the MySQL variant.
-- [ ] Automated suite passes.
-- [ ] Public URL works outside the development machine.
+- [x] No passwords, API keys, or real credentials committed.
+- [x] Production debug mode is disabled.
+- [x] HTTPS is enabled.
+- [x] Required environment variables are configured.
+- [x] Database schema initialized.
+- [ ] Automated suite passes on the final release commit.
+- [x] Public URL works outside the development machine.
 - [ ] Production CRUD works end to end.
-- [ ] Failure handling is verified.
+- [ ] Failure handling is verified in production.
 - [ ] Backup demo is prepared.
-
-## Current repository status
-
-This documentation prepares the application for deployment, but **no public production URL is claimed by this commit**. The final live URL must be recorded only after the team actually deploys and verifies it.
