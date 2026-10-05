@@ -25,13 +25,16 @@ The course handout requires the presentation to follow **problem → solution �
 
 ## Slide 4 — Architecture
 Show:
-**Browser/UI → Flask routes/controllers → application data layer**
+
+**Browser/UI → Flask routes/controllers → validation → MySQL database → JSON response → UI feedback**
 
 Explain:
-- HTML/CSS provides the views.
+- HTML/CSS provides the interface.
 - JavaScript uses Fetch API for asynchronous CRUD.
-- Flask validates requests and returns JSON responses.
+- Flask validates requests and handles database operations.
+- MySQL stores users, patients, appointments, medical records, and health services.
 - Automated tests exercise backend behavior.
+- Railway hosts the production web application and MySQL service.
 
 ## Slide 5 — QA Strategy
 - Automated CRUD tests
@@ -40,23 +43,28 @@ Explain:
 - 403 authorization test
 - Manual loading/empty/error/network tests
 - Production smoke tests
+- Bug triage and P0/P1 release gate
 
 ## Slide 6 — Live Demo
+Use the deployed public URL:
+
+**https://web-production-64a9f1.up.railway.app**
+
 Recommended sequence:
-1. Open public URL.
+1. Sign in.
 2. Create patient.
 3. Show patient in list.
 4. Edit patient.
-5. Create appointment for the patient.
-6. Create medical record.
-7. Show health services.
-8. Show user management.
-9. Trigger invalid input and demonstrate the helpful error.
-10. Show a missing record/404 handling.
-11. Explain the loading/error/retry behavior.
+5. Delete patient.
+6. Create appointment.
+7. Create medical record.
+8. Show health services.
+9. Show user management.
+10. Trigger invalid input and demonstrate the helpful error.
+11. Demonstrate a missing-record/error state.
 
 ## Slide 7 — Failure Demo
-Do not show only the happy path. Demonstrate:
+Demonstrate:
 - invalid patient data
 - invalid appointment status
 - missing record
@@ -65,9 +73,10 @@ Do not show only the happy path. Demonstrate:
 The handout specifically warns against demonstrating only the happy path.
 
 ## Slide 8 — Lessons
-- Reusable components reduce duplicated UI logic.
-- Automated tests catch regressions early.
-- Production deployment requires a separate release checklist.
+- Reusable UI behavior reduces duplication.
+- Automated tests catch regressions.
+- Persistent database configuration must be verified separately from local development.
+- Production deployment requires environment-specific configuration and smoke testing.
 - Clear errors are part of the user experience.
 
 ## Slide 9 — Retrospective
@@ -79,14 +88,12 @@ Summarize:
 
 ## Slide 10 — Backup
 Keep ready:
-- local copy
 - screenshots
 - recorded demo if permitted
 - test results
 - repository/PR link
-
-A backup is important because the handout explicitly cautions against a live demo with no backup.
+- local fallback
 
 ## Defense preparation
 
-Each student should be able to explain their own commits without AI or teammate assistance. The handout gives the unassisted defense 25 individual points and states that a student who cannot defend their code cannot pass the individual half on commits alone.
+Each student should be able to explain their own committed work without AI or teammate assistance, including request flow, validation, missing records, tests, and known limitations.
