@@ -99,7 +99,9 @@ class Deliverable4MySQLTestCase(unittest.TestCase):
     def test_patient_crud(self):
         patient_id = self.create_patient()
         self.assertEqual(self.client.get("/api/patients").status_code, 200)
-        self.assertEqual(self.client.get(f"/api/patients/{patient_id}").status_code, 404)
+        patient_get = self.client.get(f"/api/patients/{patient_id}")
+        self.assertEqual(patient_get.status_code, 200)
+        self.assertEqual(patient_get.get_json()["data"]["id"], patient_id)
         updated = self.client.put(
             f"/api/patients/{patient_id}",
             json={"address": "Updated Health Center Address"},
@@ -123,6 +125,10 @@ class Deliverable4MySQLTestCase(unittest.TestCase):
         )
         self.assertEqual(appointment.status_code, 201)
         appointment_id = appointment.get_json()["data"]["id"]
+        appointment_get = self.client.get(f"/api/appointments/{appointment_id}")
+        self.assertEqual(appointment_get.status_code, 200)
+        self.assertEqual(appointment_get.get_json()["data"]["id"], appointment_id)
+
         self.assertEqual(
             self.client.put(
                 f"/api/appointments/{appointment_id}",
@@ -143,6 +149,10 @@ class Deliverable4MySQLTestCase(unittest.TestCase):
         )
         self.assertEqual(record.status_code, 201)
         record_id = record.get_json()["data"]["id"]
+        record_get = self.client.get(f"/api/medical-records/{record_id}")
+        self.assertEqual(record_get.status_code, 200)
+        self.assertEqual(record_get.get_json()["data"]["id"], record_id)
+
         self.assertEqual(
             self.client.put(
                 f"/api/medical-records/{record_id}",
@@ -180,6 +190,10 @@ class Deliverable4MySQLTestCase(unittest.TestCase):
         )
         self.assertEqual(service.status_code, 201)
         service_id = service.get_json()["data"]["id"]
+        service_get = self.client.get(f"/api/services/{service_id}")
+        self.assertEqual(service_get.status_code, 200)
+        self.assertEqual(service_get.get_json()["data"]["id"], service_id)
+
         self.assertEqual(
             self.client.put(
                 f"/api/services/{service_id}",
@@ -199,6 +213,10 @@ class Deliverable4MySQLTestCase(unittest.TestCase):
         )
         self.assertEqual(user.status_code, 201)
         user_id = user.get_json()["data"]["id"]
+        user_get = self.client.get(f"/api/users/{user_id}")
+        self.assertEqual(user_get.status_code, 200)
+        self.assertEqual(user_get.get_json()["data"]["id"], user_id)
+
         self.assertEqual(
             self.client.put(
                 f"/api/users/{user_id}",
