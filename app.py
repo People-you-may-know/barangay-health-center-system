@@ -424,7 +424,7 @@ def get_patient(id):
 @app.get("/api/patients/<int:id>")
 @auth
 def get_api_patient(id):
-    return err("Patient not found", code=404)
+    return get_patient(id)
 
 
 @app.post("/patients")
@@ -591,7 +591,7 @@ def get_appointment(id):
 @app.get("/api/appointments/<int:id>")
 @auth
 def get_api_appointment(id):
-    return err("Appointment not found", code=404)
+    return get_appointment(id)
 
 
 @app.post("/appointments")
@@ -751,7 +751,7 @@ def get_record(id):
 @app.get("/api/medical-records/<int:id>")
 @auth
 def get_api_record(id):
-    return err("Medical record not found", code=404)
+    return get_record(id)
 
 
 @app.post("/medical-records")
@@ -884,7 +884,7 @@ def get_service(id):
 @app.get("/api/health-services/<int:id>")
 @auth
 def get_api_service(id):
-    return err("Service not found", code=404)
+    return get_service(id)
 
 
 @app.post("/health-services")
@@ -1024,7 +1024,7 @@ def get_user(id):
 @app.get("/api/users/<int:id>")
 @auth
 def get_api_user(id):
-    return err("User not found", code=404)
+    return get_user(id)
 
 
 @app.post("/users")
