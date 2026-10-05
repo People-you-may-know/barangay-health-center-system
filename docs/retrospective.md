@@ -5,16 +5,17 @@
 - The team moved from a basic Flask application toward a structured request/response workflow with controllers and API routes.
 - Asynchronous UI behavior and clearer loading, success, and error feedback were introduced.
 - Error handling was strengthened for validation, missing records, and network/server failures.
-- Code review work and automated patient API coverage were added, including protection against patient ID reuse after deletion.
+- Code review work and automated API coverage were added.
 - QA work added critical-path tests, adversarial scenarios, and date-validation coverage.
 - The interface work added reusable loading, success, error, retry, detail, create, and edit patterns.
+- The production application was deployed on Railway and connected to Railway MySQL.
 - The team kept work visible through branches, pull requests, commits, and documentation.
 
 ## What did not go well
 
-- Some manual browser QA remained dependent on team execution instead of being fully captured automatically.
-- Deployment was prepared in the repository, but the final public hosting step still depends on the team selecting and provisioning a host.
-- The project has had both in-memory and MySQL-backed development variants, so the release branch must be chosen carefully and its runtime configuration verified before deployment.
+- Some manual browser QA still needs to be captured as explicit evidence rather than inferred from documentation.
+- Production deployment required a separate database initialization step because the Railway MySQL database initially existed without the application's tables.
+- The project contains historical in-memory implementation files/commits alongside the current MySQL-backed release path, so the release configuration needs to be kept consistent.
 - Some validation patterns are duplicated between application/controller layers.
 
 ## What we learned
@@ -26,6 +27,7 @@
 5. Treat deployment configuration as code and verify it before presentation day.
 6. Keep an explicit release gate for unresolved P0/P1 issues.
 7. Each member should understand and be able to explain their own committed work.
+8. A production web deployment and its database schema must be verified together.
 
 ## What we would change next time
 
@@ -38,9 +40,9 @@
 
 ## What we will improve before final sign-off
 
-- Complete and verify the public deployment.
-- Run the full automated suite in CI and record the result.
-- Perform the remaining manual UI/production matrix.
+- Complete and document the full production CRUD smoke test.
+- Run and record the final automated suite result.
+- Verify the remaining production failure paths.
 - Resolve all P0/P1 release blockers.
 - Prepare a backup demo and rehearse the individual defense.
 
@@ -50,4 +52,4 @@ Issues are treated as system/process problems rather than individual failures. T
 
 ## Final status
 
-The repository contains the QA, deployment, retrospective, and presentation preparation materials. The team must still complete the actual live deployment, live demo, and individual unassisted defense before final sign-off.
+The application is deployed on Railway with a Railway MySQL database, and login/dashboard access has been verified. The final release still requires explicit production CRUD/failure-path evidence, final QA sign-off, a rehearsed demo, and the individual unassisted defense.
